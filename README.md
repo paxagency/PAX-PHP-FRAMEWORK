@@ -9,8 +9,8 @@ ROUTING
 Routing is automated by file and folder creation within 
 app > php > pages
 
-GLOBALS \n
-app > php > pax > config.php \n
+GLOBALS <br />
+app > php > pax > config.php 
 
 PAGE_PUBLIC // Website URL
 DIR_ROUTE // Routing Directory
