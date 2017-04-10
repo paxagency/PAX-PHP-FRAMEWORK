@@ -20,6 +20,12 @@
 <h3>APP</h3>
 <p>Create new classes by file and folder creation within </p>
 <p>app > php > pax > app</p>
+<ul>
+<li>Classes must have unique names</li>
+<li>File names must be the same as their class names</li>
+<li>Class interaction is through "Dependency Injection"</li>
+<li>Dependencies can be created through $_inject in core app.php file or class file.</li>
+</ul>
 
 <h3>INIT</h3>
 <p>Instantiate classes from any routed or included page. </p>
