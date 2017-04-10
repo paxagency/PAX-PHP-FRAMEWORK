@@ -1,36 +1,3 @@
-<style>
-.files {width:100%; margin:0;padding:0;
-    border:solid thin #eee;
-  }
-.files li {
-  list-style-type:none;
-font-size:25px;
-line-height: 1.8em;
-padding-left:50px;
-
-}
-.files li:nth-child(even) {
-  background:#f5f5f5;
-}
-.files li.m1 {padding-left:100px;}
-.files li.m2 {padding-left:150px;}
-.files li span {opacity:.4;}
-
-.m1 {padding-left:50px;}
-.m2 {padding-left:100px;}
-pre p {text-align:left; margin:0;padding:0;  line-height: .5em;}
-.code p {text-align:left; margin:0 !important; }
-.code {background:#fafafa; border:solid thin #ccc; padding:20px; font-family:monospace; margin:20px 0;}
-hr {padding:30px; background:#ddd !important; margin:0; }
-@media all and (max-width: 735px) {
-.files li {font-size:1em;}
-.files li {padding-left:10px}
-.files li.m1 {padding-left:30px;}
-.files li.m2 {padding-left:60px;}
-.m1 {padding-left:30px;}
-.m2 {padding-left:60px;}
-}
-  </style>
 <h1>PHP Micro Framework</h1>
 <h2>Rapid Routing & Application Design</h2>
 
@@ -40,12 +7,12 @@ hr {padding:30px; background:#ddd !important; margin:0; }
 <ul class='files' >
     <li><span class='fi-page'></span> index.php</li>
     <li><span class='fi-folder'></span> app</li>
-      <li class='m1'><span class='fi-folder'></span> css</li>
+      <ul><li class='m1'><span class='fi-folder'></span> css</li>
       <li class='m1'><span class='fi-folder'></span> js</li>
       <li class='m1'><span class='fi-folder'></span> php</li>
       <li class='m2'><span class='fi-folder'></span> pages</li>
       <li class='m2'><span class='fi-folder'></span> includes</li>
-      <li class='m2'><span class='fi-folder'></span> pax</li>
+      <li class='m2'><span class='fi-folder'></span> pax</li></ul>
   </ul>
   
 <h3>ROUTING</h3>
