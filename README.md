@@ -27,7 +27,7 @@
 <p>app > php > includes</p>
 <br />
 <pre>
-<p>require_once(DIR_APP.'app.php');</p>
-<p>$app = new app(['new_class']);</p>
-<p>$app->new_class->hello();</p>
+require_once(DIR_APP.'app.php');<br />
+$app = new app(['new_class']);<br />
+$app->new_class->hello();
 </pre>
