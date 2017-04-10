@@ -6,10 +6,10 @@
 
 <h3>ROUTING</h3>
 <p>Routing is automated by file and folder creation within </p>
-<p>app > php > pages</p>
+<p><strong>app > php > pages</strong></p>
 
 <h3>GLOBALS </h3>
-<p>app > php > pax > config.php </p>
+<p><strong>app > php > pax > config.php </strong></p>
 <br />
 <p>PAGE_PUBLIC // Website URL</p>
 <p>DIR_ROUTE // Routing Directory</p>
@@ -19,7 +19,7 @@
 
 <h3>APP</h3>
 <p>Create new classes by file and folder creation within </p>
-<p>app > php > pax > app</p>
+<p><strong>app > php > pax > app</strong></p>
 <ul>
 <li>Classes must have unique names</li>
 <li>File names must be the same as their class names</li>
@@ -32,8 +32,8 @@
 
 <h3>INIT</h3>
 <p>Instantiate classes from any routed or included page. </p>
-<p>app > php > pages </p>
-<p>app > php > includes</p>
+<p><strong>app > php > pages </strong></p>
+<p><strong>app > php > includes</strong></p>
 <br />
 <pre>
 require_once(DIR_APP.'app.php');<br />
