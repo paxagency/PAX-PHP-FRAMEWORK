@@ -23,8 +23,8 @@
 <ul>
 <li>Classes must have unique names</li>
 <li>File names must be the same as their class names</li>
-<li>Class interaction is through "Dependency Injection"</li>
-<li>Dependencies can be created through $_inject in core app.php file or class file.</li>
+<li>Class interaction is through "Dependency Injection"</li><ul>
+<li>Dependencies can be created through <ul><li>$_inject in the app > php > app > app.php file<li><li> or $_inject as a public var in the class file.</li></ul>
 </ul>
 
 <h3>INIT</h3>
