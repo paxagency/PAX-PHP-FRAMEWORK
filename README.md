@@ -23,7 +23,7 @@
 <ul>
 <li>Classes must have unique names</li>
 <li>File names must be the same as their class names</li>
-<li>Autoloaded classes can be set in the <strong>app > php > app > app.php</strong> file by the $_auto variable</li>
+<li>Autoloaded classes can be set in the <strong>app > php > pax > app.php</strong> file by the $_auto variable</li>
 <li>Class interaction is through "Dependency Injection"</li>
 <li>Dependencies can be created through <ul>
   <li>$_inject in the <strong>app > php > pax > app.php</strong> file <br /><em>(Globally will inject every new class)</em></li>
