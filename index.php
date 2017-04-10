@@ -18,7 +18,7 @@ www.paxagency.com/php
 ****************************************/
 
 require_once('app/php/pax/config.php');
-$_URL=array_slice(array_values(array_filter(explode('/',htmlspecialchars($_SERVER['REQUEST_URI'])))),DIR_INDEX);
+$_URL=array_slice(array_values(array_filter(explode('/',htmlspecialchars($_SERVER['REQUEST_URI'])),'strlen')),DIR_INDEX);
 $_PATH='error';
 
 foreach($_URL as $n=>$url) {
