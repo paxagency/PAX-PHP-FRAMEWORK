@@ -5,7 +5,7 @@ define('PAGE_PUBLIC', $_SERVER['HTTP_HOST']);
 define('DIR_ROUTE',getcwd().'/app/php/pages/');
 define('DIR_INC',getcwd().'/app/php/includes/');
 define('DIR_APP',getcwd().'/app/php/pax/');
-define('DIR_INDEX',0);
+define('DIR_INDEX',1);
 // DATABASE
 define('DB_SERVER', "http://localhost:9200");
 define('DB_NAME', 'database');
