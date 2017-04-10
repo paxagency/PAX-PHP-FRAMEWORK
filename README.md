@@ -10,9 +10,9 @@
       <ul><li class='m1'><span class='fi-folder'></span> css</li>
       <li class='m1'><span class='fi-folder'></span> js</li>
       <li class='m1'><span class='fi-folder'></span> php</li>
-      <li class='m2'><span class='fi-folder'></span> pages</li>
+      <ul><li class='m2'><span class='fi-folder'></span> pages</li>
       <li class='m2'><span class='fi-folder'></span> includes</li>
-      <li class='m2'><span class='fi-folder'></span> pax</li></ul>
+      <li class='m2'><span class='fi-folder'></span> pax</li></ul></ul>
   </ul>
   
 <h3>ROUTING</h3>
