@@ -23,12 +23,12 @@ class app {
 	}
 	public function setFolder($dir) {
 	  foreach(scandir($dir) as $file) {
-	  	if($file[0]==".") continue;
+	    if($file[0]==".") continue;
 	    if(is_dir($dir.'/'.$file)) {
-	      $folders[] = $dir.'/'.$file;
+	        $folders[] = $dir.'/'.$file;
 	    } else {
-		  $name = str_replace('.php','',$file);
-	      $this->_folder[$name] = $dir.'/'.$file;
+		$name = str_replace('.php','',$file);
+	     	$this->_folder[$name] = $dir.'/'.$file;
 	    }
 	  }
 	  foreach($folders as $f) $this->setFolder($f);
