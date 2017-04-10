@@ -23,8 +23,11 @@
 <ul>
 <li>Classes must have unique names</li>
 <li>File names must be the same as their class names</li>
-<li>Class interaction is through "Dependency Injection"</li><ul>
-<li>Dependencies can be created through <ul><li>$_inject in the app > php > app > app.php file<li><li> or $_inject as a public var in the class file.</li></ul>
+<li>Autoloaded classes can be set in the app > php > app > app.php file by the $_auto variable</li>
+<li>Class interaction is through "Dependency Injection"</li>
+<li>Dependencies can be created through <ul><li>$_inject in the app > php > app > app.php file<li><li> $_inject as a public var in the class file.</li>
+<li>Easily include the Composer Autoload to allow access to all PSR-4 PHP libraries needed</li>
+</ul>
 </ul>
 
 <h3>INIT</h3>
