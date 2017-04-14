@@ -18,17 +18,17 @@
 <h3>ROUTING</h3>
 <p>Routing is automated by file and folder creation within </p>
 <p><strong>app > php > pages</strong></p>
-<p><em>If you initially get an error, make sure you update the DIR_INDEX to the proper sub-folder index</em></p>
+<p><em>If you initially get an error, make sure you update the DIR_INDEX to the proper sub-folder index from the domain.</em></p>
 <br />
 <h3>GLOBALS </h3>
 <p><strong>app > php > pax > config.php </strong></p>
 <br />
-<p>PAGE_PUBLIC <em>(Website URL)</em></p>
-<p>DIR_ROUTE <em>(Routing Directory)</em></p>
-<p>DIR_INC <em>(Includes Directory)</em></p>
-<p>DIR_APP <em>(App Directory)</em></p>
-<p>DIR_INDEX <em>(Root Folder Position from Domain)</em></p>
-<p>$_URL <em>(Array of GET variables)</em></p>
+<p><strong>PAGE_PUBLIC</strong> <em>(Website URL)</em></p>
+<p><strong>DIR_ROUTE</strong> <em>(Routing Directory)</em></p>
+<p><strong>DIR_INC</strong> <em>(Includes Directory)</em></p>
+<p><strong>DIR_APP</strong> <em>(App Directory)</em></p>
+<p><strong>DIR_INDEX</strong> <em>(Root Folder Position from Domain)</em></p>
+<p><strong>$_URL</strong> <em>(Array of GET variables)</em></p>
 <br />
 <h3>APP</h3>
 <p>Create new classes by file and folder creation within </p>
