@@ -1,7 +1,7 @@
 <h1>PHP Micro Framework</h1>
 <h2>Rapid Routing & Application Design</h2>
 <br />
-<h3>FILE STRUCTURE</h3>
+<h2>FILE STRUCTURE</h2>
 <p>The file structure is incredibly simplistic and easy to understand. Even PHP beginners and designers can create staticly routed websites within minutes.</p>
 
 <ul class='files' >
@@ -15,12 +15,12 @@
       <li class='m2'><span class='fi-folder'></span> pax</li></ul></ul>
   </ul>
   <br />
-<h3>ROUTING</h3>
+<h2>ROUTING</h2>
 <p>Routing is automated by file and folder creation within </p>
 <p><strong>app > php > pages</strong></p>
 <p><em>*If you initially get an error, make sure you update the DIR_INDEX to the proper sub-folder index from the domain.</em></p>
 <br />
-<h3>GLOBALS </h3>
+<h2>GLOBALS </h2>
 <p><strong>app > php > pax > config.php </strong></p>
 <br />
 <p><strong>PAGE_PUBLIC</strong> <em>(Website URL)</em></p>
@@ -30,7 +30,7 @@
 <p><strong>DIR_INDEX</strong> <em>(Root Folder Position from Domain)</em></p>
 <p><strong>$_URL</strong> <em>(Array of GET variables)</em></p>
 <br />
-<h3>APP</h3>
+<h2>APP</h2>
 <p>Create new classes by file and folder creation within </p>
 <p><strong>app > php > pax > app</strong></p>
 <ul>
@@ -45,7 +45,7 @@
 </ul>
 </ul>
 <br />
-<h3>INIT</h3>
+<h2>INIT</h2>
 <p>Instantiate classes from any routed or included page. </p>
 <p><strong>app > php > pages </strong></p>
 <p><strong>app > php > includes</strong></p>
