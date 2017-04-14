@@ -1,4 +1,4 @@
-<h1>PHP Micro Framework</h1>
+<h1>PAX PHP Micro Framework</h1>
 <h2>Rapid Routing & Application Design</h2>
 <br />
 <h2>FILE STRUCTURE</h2>
