@@ -18,15 +18,17 @@
 <h3>ROUTING</h3>
 <p>Routing is automated by file and folder creation within </p>
 <p><strong>app > php > pages</strong></p>
+<p><em>If you initially get an error, make sure you update the DIR_INDEX to the proper sub-folder index</em></p>
 <br />
 <h3>GLOBALS </h3>
 <p><strong>app > php > pax > config.php </strong></p>
 <br />
-<p>PAGE_PUBLIC // Website URL</p>
-<p>DIR_ROUTE // Routing Directory</p>
-<p>DIR_INC // Includes Directory</p>
-<p>DIR_APP // App Directory</p>
-<p>$_URL // Array of GET variables</p>
+<p>PAGE_PUBLIC <em>(Website URL)</em></p>
+<p>DIR_ROUTE <em>(Routing Directory)</em></p>
+<p>DIR_INC <em>(Includes Directory)</em></p>
+<p>DIR_APP <em>(App Directory)</em></p>
+<p>DIR_INDEX <em>(Root Folder Position from Domain)</em></p>
+<p>$_URL <em>(Array of GET variables)</em></p>
 <br />
 <h3>APP</h3>
 <p>Create new classes by file and folder creation within </p>
