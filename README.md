@@ -18,7 +18,11 @@
 <h2>ROUTING</h2>
 <p>Routing is automated by file and folder creation within </p>
 <p><strong>app > php > pages</strong></p>
-<p><em>*If you initially get an error, make sure you update the DIR_INDEX to the proper sub-folder index from the domain.</em></p>
+<p><em>*If you initially get an error</em></p>
+<ul>
+<li><em>Check the DIR_INDEX to the proper sub-folder index from the domain</em></li>
+<li><em>Make sure you rename the htaccess to ".htaccess"</em></li>
+</ul>
 <br />
 <h2>GLOBALS </h2>
 <p><strong>app > php > pax > config.php </strong></p>
