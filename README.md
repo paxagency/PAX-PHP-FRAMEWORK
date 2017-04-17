@@ -20,7 +20,7 @@
 <p><strong>app > php > pages</strong></p>
 <p><em>*If you initially get an error</em></p>
 <ul>
-<li><em>Check the DIR_INDEX to the proper sub-folder index from the domain</em></li>
+<li><em>Check the DIR_INDEX so it reflects the proper sub-folder index from the domain</em></li>
 <li><em>Make sure you rename the htaccess to ".htaccess"</em></li>
 </ul>
 <br />
