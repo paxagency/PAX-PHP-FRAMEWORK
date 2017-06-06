@@ -3,12 +3,12 @@ class app {
 	public $_auto = ['session'];
 	public $_inject = ['session'];
 	public $_folder = [];
-	public function __construct($classes,$inject=[]) {
+	public function __construct($classes=[],$inject=[]) {
 		$this->setFolder(DIR_APP.'app');
 		foreach($this->_auto as $a) $this->init($a);
 		if($classes) $this->load($classes,$inject);
 	}
-	public function load($classes,$inject=[]) {
+	public function load($classes=[],$inject=[]) {
 		$inject = ($inject) ? $inject : $this->_inject;
 		foreach($classes as $c) $this->init($c,$inject);
 	}
