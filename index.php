@@ -10,7 +10,7 @@
 888     d8888888888 d88P Y88b
 888    d88P     888d88P   Y88b
 
-PAX PHP Framework 1.0
+PAX PHP Framework 0.65 BETA
 Copyright 2017 PAX Agency
 Created by Albert Kiteck
 www.paxagency.com/php
