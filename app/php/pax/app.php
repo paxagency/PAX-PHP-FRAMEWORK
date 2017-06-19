@@ -13,21 +13,23 @@ class app {
 		foreach($classes as $c) $this->init($c,$inject);
 	}
 	public function init($name,$inject=[]){
+		if(!isset($this->_folder[$name])) return;
 	  	require_once($this->_folder[$name]);
 		$this->$name = new $name();
-		if($this->$name->_inject) $inject=array_merge($inject,$this->$name->_inject);
+		if(isset($this->$name->_inject)) $inject=array_merge($inject,$this->$name->_inject);
 		foreach($inject as $p) {
-			if(!$this->$p) $this->init($p,$this->_inject);
+			if(!isset($this->$p)) $this->init($p,$this->_inject);
 			$this->$name->$p = $this->$p;
 		}
 	}
 	public function setFolder($dir) {
+	  $folders = [];
 	  foreach(scandir($dir) as $file) {
 	    if($file[0]==".") continue;
 	    if(is_dir($dir.'/'.$file)) {
 	        $folders[] = $dir.'/'.$file;
 	    } else {
-		$name = str_replace('.php','',$file);
+			$name = str_replace('.php','',$file);
 	     	$this->_folder[$name] = $dir.'/'.$file;
 	    }
 	  }

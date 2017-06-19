@@ -20,7 +20,7 @@ www.paxagency.com/php
 require_once('app/php/pax/config.php');
 $_URL=array_slice(explode('/',htmlspecialchars($_SERVER['REQUEST_URI'])),DIR_INDEX);
 $_PATH='error';
-
+$path='';
 foreach($_URL as $n=>$url) {
 	$path.=($n) ? '/'.$url : $url;
 	if($_PATH=='error' && file_exists(DIR_ROUTE.$path.'.php')) $_PATH=$path; 
