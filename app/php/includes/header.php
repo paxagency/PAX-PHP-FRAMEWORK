@@ -8,7 +8,7 @@
 <body>
 
 <?php
-require_once(DIR_APP.'app.php');
+require_once(DIR_APP);
 $app = new app(['example']);
 ?>
 

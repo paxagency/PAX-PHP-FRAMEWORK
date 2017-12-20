@@ -10,15 +10,18 @@
 888     d8888888888 d88P Y88b
 888    d88P     888d88P   Y88b
 
-PAX PHP Framework 0.65 BETA
+PAX PHP Framework 1.1 
 Copyright 2017 PAX Agency
 Created by Albert Kiteck
 www.paxagency.com/php
 ****************************************
 ****************************************/
 
-require_once('app/php/pax/config.php');
-$_URL=array_slice(explode('/',htmlspecialchars($_SERVER['REQUEST_URI'])),DIR_INDEX);
+require_once('app/php/app/config.php');
+
+$_URL=explode('?',htmlspecialchars($_SERVER['REQUEST_URI']));
+$_URL=array_slice(explode('/',$_URL[0]),DIR_INDEX);
+
 $_PATH='error';
 $path='';
 foreach($_URL as $n=>$url) {

@@ -4,7 +4,7 @@
 <h2>FILE STRUCTURE</h2>
 <p>The file structure is incredibly simplistic and easy to understand. Even PHP beginners and designers can create staticly routed websites within minutes.</p>
 
-<ul class='files' >
+<ul class='files'>
     <li><span class='fi-page'></span> index.php</li>
     <li><span class='fi-folder'></span> app</li>
       <ul><li class='m1'><span class='fi-folder'></span> css</li>
@@ -12,7 +12,7 @@
       <li class='m1'><span class='fi-folder'></span> php</li>
       <ul><li class='m2'><span class='fi-folder'></span> pages</li>
       <li class='m2'><span class='fi-folder'></span> includes</li>
-      <li class='m2'><span class='fi-folder'></span> pax</li></ul></ul>
+      <li class='m2'><span class='fi-folder'></span> app</li></ul></ul>
   </ul>
   <br />
 <h2>ROUTING</h2>
@@ -33,8 +33,9 @@
 <p><strong>DIR_ROUTE</strong> <em>(Routing Directory)</em></p>
 <p><strong>DIR_INC</strong> <em>(Includes Directory)</em></p>
 <p><strong>DIR_APP</strong> <em>(App Directory)</em></p>
+<p><strong>DIR_CLASS</strong> <em>(Class Directory)</em></p>
 <p><strong>DIR_INDEX</strong> <em>(Root Folder Position from Domain)</em></p>
-<p><strong>$_URL</strong> <em>(Array of GET variables)</em></p>
+<p><strong>$_URL</strong> <em>(Array of URL variables separated by "/")</em></p>
 <br />
 <h2>APP</h2>
 <p>Create new classes by file and folder creation within </p>
@@ -57,7 +58,7 @@
 <p><strong>app > php > includes</strong></p>
 <br />
 <pre>
-require_once(DIR_APP.'app.php');<br />
+require_once(DIR_APP);<br />
 $app = new app(['new_class']);<br />
 $app->new_class->hello();
 </pre>
