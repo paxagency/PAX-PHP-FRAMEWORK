@@ -39,14 +39,14 @@
 <br />
 <h2>APP</h2>
 <p>Create new classes by file and folder creation within </p>
-<p><strong>app > php > pax > app</strong></p>
+<p><strong>app > php > app > classes</strong></p>
 <ul>
 <li>Classes must have unique names</li>
 <li>File names must be the same as their class names</li>
-<li>Autoloaded classes can be set in the <strong>app > php > pax > app.php</strong> file by the $_auto variable</li>
+<li>Autoloaded classes can be set in the <strong>app > php > app > app.php</strong> file by the $_auto variable</li>
 <li>Class interaction is through "Dependency Injection"</li>
 <li>Dependencies can be created through <ul>
-  <li>$_inject in the <strong>app > php > pax > app.php</strong> file <br /><em>(Globally will inject every new class)</em></li>
+  <li>$_inject in the <strong>app > php > app > app.php</strong> file <br /><em>(Globally will inject every new class)</em></li>
   <li>$_inject as a public var in the class file.</li></ul></li>
 <li>Easily include the Composer Autoload to allow access to all PSR-4 PHP libraries needed</li>
 </ul>
