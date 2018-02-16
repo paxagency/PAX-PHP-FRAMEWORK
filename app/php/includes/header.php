@@ -6,6 +6,7 @@
   <title>Website</title>
 </head>
 <body>
+
 <?php
 require_once(DIR_APP);
 $app = new app(['example']);
