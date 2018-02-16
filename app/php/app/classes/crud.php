@@ -31,10 +31,10 @@ class crud {
         return $this->mysql->delete($get[0],$get[1]);
     }
     public function auth($get,$n=0){
+        //WRITE CUSTOM AUTH FUNCTION
         if(!isset($get[0])) return 0;
         if($n>0 && !isset($get[1])) return 0;
         return 1;
-        //WRITE CUSTOM AUTH FUNCTION
     }
 }
 ?>
