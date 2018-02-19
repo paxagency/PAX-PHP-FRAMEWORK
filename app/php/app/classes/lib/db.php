@@ -10,14 +10,14 @@
 888     d8888888888 d88P Y88b
 888    d88P     888d88P   Y88b
 
-MYSQL V 1.0
-Copyright 2018 PAXagency
+DB V 1.0
+Copyright 2018 Pax Aagency
 Created by Albert Kiteck
 www.paxagency.com
 ****************************************
 ****************************************/
 
-class mysql {
+class db {
 	public $connection;
 	public $string='';
 	public $values = [];
@@ -26,13 +26,16 @@ class mysql {
 		$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
-	public function query($string){
-		$query = $this->connection->query($string);
-		$results = $query->fetchAll(PDO::FETCH_ASSOC);
-		return  $results;
-  	}
-    public function get($table,$data,$fields=[]){
-		$vals = (!$fields) ? '*' : implode(',',$fields);
+
+	/**
+	* Get One Row
+	* @param  string 		 $table
+	* @param  array|integer  $data
+	* @param  array  		 $select
+	* @return array
+	*/
+    public function get($table,$data,$select=[]){
+		$vals = (!$select) ? '*' : implode(',',$select);
 		$string = "SELECT ".$vals." FROM ".$table;
 	 	$values = [];
 		if(is_array($data)){
@@ -51,15 +54,13 @@ class mysql {
 		$results = $query->fetchAll(PDO::FETCH_ASSOC);
 		return ($results) ? $results[0] : $results;
   	}
-	public function getSearch($table,$query=[],$fields=[]) {
-		$build = $this->buildWhere($query);
-		$join = $this->buildJoin($query,$fields);
-		$string = "SELECT ".$join['fields']." FROM ".$table.$join['string'].$build['query'];
-		$call = $this->connection->prepare($string);
-		$call->execute($build['values']);
-		$results= $call->fetchAll(PDO::FETCH_ASSOC);
-		return ($results) ? $results[0] : $results;
-	}
+
+	/**
+	* Save New Row
+	* @param  string $table
+	* @param  array  $data
+	* @return integer
+	*/
   	public function save($table,$data){
 		$second = false;
 		$values = [];
@@ -77,6 +78,14 @@ class mysql {
 		$query->execute($values);
 		return $this->connection->lastInsertId();
   	}
+
+	/**
+	* Update Row
+	* @param  string   $table
+	* @param  integer  $id
+	* @param  array    $data
+	* @return integer
+	*/
 	public function update($table,$id,$data){
 		$q = "UPDATE ".$table." SET ";
 		$second = false;
@@ -93,23 +102,14 @@ class mysql {
 		$query->execute($values);
 		return $query->rowCount();
   	}
-  	public function updateSearch($table,$data,$query){
-		$string = "UPDATE ".$table." SET ";
-		$second = false;
-		$values = [];
-		foreach($data as $key=>$var) {
-			if($second) $string.=",";
-			$string.= $key."=?";
-			$values[]=$var;
-			$second = true;
-		}
-		$string.=$build['query'];
-		$values=$build['values'];
-		$query = $this->connection->prepare($string);
-		$query->execute($values);
-		return $query->rowCount();
-  	}
-	public function count($table, $query=[]){
+
+	/**
+	* Count Table
+	* @param  string   $table
+	* @param  array    $query
+	* @return integer
+	*/
+	public function count($table,$query=[]){
 		$string = '';
 		$values = [];
 		if($query){
@@ -122,6 +122,13 @@ class mysql {
 		$query->execute($values);
 		return $query->fetchColumn();
 	}
+
+	/**
+	* Remove Row
+	* @param  string   $table
+	* @param  integer    $id
+	* @return integer
+	*/
 	public function delete($table,$id) {
 		$string = "DELETE FROM ".$table." WHERE id=?";
 		$values[] = $id;
@@ -129,18 +136,28 @@ class mysql {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-	public function search($table,$query=[],$fields=[],$max=10,$page=0,$sort='ASC',$order='id',$count=1) {
+	/**
+	* Search Row
+	* @param  string   $table
+	* @param  array    $query
+	* @param  integer  $max
+	* @param  integer  $page
+	* @param  string   $sort
+	* @param  string   $order
+	* @param  integer  $count
+	* @return integer
+	*/
+	public function search($table,$query=[],$max=10,$page=0,$sort='ASC',$order='id',$count=1) {
 		$build = $this->buildWhere($query);
+		$fields = (isset($query['select'])) ? $query['select'] : [];
 		$string = $build['query'];
 		$values = $build['values'];
-		//GET COUNT
-		$query_count = ($count) ? $this->searchCount("SELECT Count(1) FROM ".$table.$string,$values) : null;
+		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$string,$values) : null;
 		if(!$max) ['count'=>$query_count,'hits'=>[]];
-		//SET SORT AND ORDER
 		$start = $page * $max;
+		$order = (isset($query['join']) && strpos($order, '.')==false) ? $table.'.'.$order : $order;
 		$string.=" ORDER BY ".$order." ".$sort;
 		$string.=" LIMIT ".$start.",".$max;
-		//PREPARE JOIN
 		$join = $this->buildJoin($query,$fields);
 		$string = "SELECT ".$join['fields']." FROM ".$table.$join['string'].$string;
 		if($query){
@@ -153,11 +170,72 @@ class mysql {
 		}
 		return ['count'=>$query_count,'hits'=>$results];
 	}
-	public function searchCount($q,$values){
-		$query = $this->connection->prepare($q);
+
+	/**
+	* Get One Row
+	* @param  string $table
+	* @param  array  $query
+	* @return array
+	*/
+	public function searchGet($table,$query) {
+		$select = (isset($query['select'])) ? $query['select'] : [];
+		$build = $this->buildWhere($query);
+		$join = $this->buildJoin($query,$select);
+		$string = "SELECT ".$join['fields']." FROM ".$table.$join['string'].$build['query'];
+		$call = $this->connection->prepare($string);
+		$call->execute($build['values']);
+		$results= $call->fetchAll(PDO::FETCH_ASSOC);
+		return ($results) ? $results[0] : $results;
+	}
+
+	/**
+	* Update Row
+	* @param  string   $table
+	* @param  array    $query
+	* @param  array    $data
+	* @return integer
+	*/
+  	public function searchUpdate($table,$query,$data){
+		$build = $this->buildWhere($query);
+		$string = "UPDATE ".$table." SET ";
+		$second = false;
+		$values = [];
+		foreach($data as $key=>$var) {
+			if($second) $string.=",";
+			$string.= $key."=?";
+			$values[]=$var;
+			$second = true;
+		}
+		$string.=$build['query'];
+		$values=$build['values'];
+		$query=$this->connection->prepare($string);
+		$query->execute($values);
+		return $query->rowCount();
+  	}
+
+	/**
+	* Query From Raw String
+	* @param  string $string
+	* @return mixed
+	*/
+	public function query($string){
+		$query = $this->connection->query($string);
+		$results = $query->fetchAll(PDO::FETCH_ASSOC);
+		return  $results;
+  	}
+
+	/**
+	* Count Table By String
+	* @param  string   $string
+	* @param  array    $values
+	* @return integer
+	*/
+	public function countString($string,$values){
+		$query = $this->connection->prepare($string);
 		$query->execute($values);
 		return $query->fetchColumn();
 	}
+
 	public function buildJoin($query,$fields){
 		if(!isset($query['join'])) {
 			$vals = (!$fields) ? '*' : implode(',',$fields);

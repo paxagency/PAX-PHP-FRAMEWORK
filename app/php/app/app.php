@@ -1,15 +1,15 @@
 <?php
 class app {
-	public $_auto = ['session'];
 	public $_inject = ['session'];
 	public $_folder = [];
 	public function __construct($classes=[],$inject=[]) {
 		$this->_setFolder(DIR_CLASS);
-		foreach($this->_auto as $a) $this->_init($a);
-		if($classes) $this->load($classes,$inject);
+		if($inject) $this->_inject=array_merge($inject,$this->_inject);
+		foreach($this->_inject as $i) $this->_init($i);
+		if($classes) $this->load($classes,$this->_inject);
 	}
 	public function load($classes=[],$inject=[]) {
-		$inject = ($inject) ? $inject : $this->_inject;
+		$inject = ($inject) ? array_merge($inject,$this->_inject) : $this->_inject;
 		foreach($classes as $c) $this->_init($c,$inject);
 	}
 	public function _init($name,$inject=[]){
