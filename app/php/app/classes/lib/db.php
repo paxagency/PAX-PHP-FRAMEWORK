@@ -152,14 +152,17 @@ class db {
 		$fields = (isset($query['select'])) ? $query['select'] : [];
 		$string = $build['query'];
 		$values = $build['values'];
-		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$string,$values) : null;
+		$join = $this->buildJoin($query,$fields);
+
+		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$join['string'].$string,$values) : null;
 		if(!$max) ['count'=>$query_count,'hits'=>[]];
 		$start = $page * $max;
 		$order = (isset($query['join']) && strpos($order, '.')==false) ? $table.'.'.$order : $order;
 		$string.=" ORDER BY ".$order." ".$sort;
 		$string.=" LIMIT ".$start.",".$max;
-		$join = $this->buildJoin($query,$fields);
+
 		$string = "SELECT ".$join['fields']." FROM ".$table.$join['string'].$string;
+		//echo $string;
 		if($query){
 			$call = $this->connection->prepare($string);
 			$call->execute($values);
@@ -274,8 +277,8 @@ class db {
         $this->string = '';
         $this->values = [];
         $this->build($query);
-		if($this->string!='') $this->string = ' WHERE '.$this->string;
-        return ['query'=>$this->string,'values'=>$this->values];
+		if($this->string!='') $this->string = ' WHERE ('.$this->string;
+        return ['query'=>''.$this->string.') ','values'=>$this->values];
     }
 	public function build($data,$bool='AND'){
         if(!$this->assoc($data) && !$this->assoc($data[0])){
@@ -295,7 +298,7 @@ class db {
                     if($last) $prev_bool = '';
                     $this->string.=') '.$prev_bool.' ';
                 } else {
-                    if($n) $this->string.=" ".strtoupper($key)." ";
+                    if($n) $this->string.=") AND (";
                     $this->build($value, strtoupper($key));
                     $n++;
                 }
