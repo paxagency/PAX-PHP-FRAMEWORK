@@ -10,8 +10,8 @@
 888     d8888888888 d88P Y88b
 888    d88P     888d88P   Y88b
 
-PAX PHP Framework 1.1 
-Copyright 2017 PAX Agency
+PAX PHP Framework 1.1
+Copyright 2018 PAX Agency
 Created by Albert Kiteck
 www.paxagency.com/php
 ****************************************
@@ -26,7 +26,7 @@ $_PATH='error';
 $path='';
 foreach($_URL as $n=>$url) {
 	$path.=($n) ? '/'.$url : $url;
-	if($_PATH=='error' && file_exists(DIR_ROUTE.$path.'.php')) $_PATH=$path; 
+	if($_PATH=='error' && file_exists(DIR_ROUTE.$path.'.php')) $_PATH=$path;
 }
 
 if($_PATH=='error' && file_exists(DIR_ROUTE.$path.'/index.php')) $_PATH = $path.'/index';

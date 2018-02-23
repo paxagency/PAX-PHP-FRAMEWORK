@@ -1,7 +1,7 @@
 <?php
 class app {
 	public $_inject = ['session'];
-	public $_folder = [];
+	private $_folder = [];
 	public function __construct($classes=[],$inject=[]) {
 		$this->_setFolder(DIR_CLASS);
 		if($inject) $this->_inject=array_merge($inject,$this->_inject);

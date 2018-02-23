@@ -3,12 +3,14 @@
 class session {
 	public $data = array();
 	public function __construct($session_id = '',  $key = 'default') {
-	
+
 		if (!session_id()) {
+			$ssl = (isset($_SERVER['HTTPS'])) ? 1 : 0;
 			ini_set('session.use_only_cookies', 'Off');
 			ini_set('session.use_cookies', 'On');
 			ini_set('session.use_trans_sid', 'Off');
 			ini_set('session.cookie_httponly', 'On');
+			if($ssl) ini_set('session.cookie_secure', 'On');
 
 			if (isset($_COOKIE[session_name()]) && !preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $_COOKIE[session_name()])) {
 				exit();
