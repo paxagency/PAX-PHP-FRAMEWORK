@@ -20,10 +20,10 @@ class crud {
     public function search($post,$get) {
         if(!$this->auth($get)) return 0;
         $type = $get[0] ?? '';
-        $max =  $get[1] ?? 12;
-        $page =  $get[2] ?? 0;
-        $sort =  $get[3] ?? 'asc';
-        $order =  $get[4] ?? 'id';
+        $max = $get[1] ?? 12;
+        $page = $get[2] ?? 0;
+        $sort = $get[3] ?? 'asc';
+        $order = $get[4] ?? 'id';
         return $this->db->search($type,$post,$max,$page,$sort,$order);
     }
     public function delete($post,$get) {
