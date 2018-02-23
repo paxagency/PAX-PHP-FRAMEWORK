@@ -136,6 +136,7 @@ class db {
 		$query->execute($values);
 		return $query->rowCount();
 	}
+	
 	/**
 	* Search Row
 	* @param  string   $table
