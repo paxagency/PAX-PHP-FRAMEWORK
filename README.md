@@ -1,5 +1,6 @@
 <h1>PAX PHP Micro Framework</h1>
 <h2>Rapid Routing & Application Design</h2>
+<a href='http://docs.paxagency.com/php'>http://docs.paxagency.com/php</a>
 <br />
 <h2>FILE STRUCTURE</h2>
 <p>The file structure is incredibly simplistic and easy to understand. Even PHP beginners and designers can create staticly routed websites within minutes.</p>
