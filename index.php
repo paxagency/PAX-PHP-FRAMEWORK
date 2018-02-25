@@ -13,12 +13,10 @@
 PAX PHP Framework 1.1
 Copyright 2018 PAX Agency
 Created by Albert Kiteck
-www.paxagency.com/php
+docs.paxagency.com/php
 ****************************************
 ****************************************/
-
 require_once('app/php/app/config.php');
-
 $_URL=explode('?',htmlspecialchars($_SERVER['REQUEST_URI']));
 $_URL=array_slice(explode('/',$_URL[0]),DIR_INDEX);
 
@@ -33,6 +31,4 @@ if($_PATH=='error' && file_exists(DIR_ROUTE.$path.'/index.php')) $_PATH = $path.
 if($_URL[0]!='call') require_once(DIR_INC.'header.php');
 require_once(DIR_ROUTE.$_PATH.'.php');
 if($_URL[0]!='call') require_once(DIR_INC.'footer.php');
-
-
 ?>
