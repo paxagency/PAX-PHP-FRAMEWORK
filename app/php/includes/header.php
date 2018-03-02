@@ -1,3 +1,7 @@
+<?php
+    require_once(DIR_APP);
+    $app = new app(['example']);
+?>
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
@@ -6,8 +10,3 @@
   <title>Website</title>
 </head>
 <body>
-
-<?php
-require_once(DIR_APP);
-$app = new app(['example']);
-?>
