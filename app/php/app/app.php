@@ -1,7 +1,7 @@
 <?php
 class app {
-	public $_inject = ['session'];
 	private $_folder = [];
+	public $_inject = ['session'];
 	public function __construct($classes=[],$inject=[]) {
 		$this->_setFolder(DIR_CLASS);
 		if($inject) $this->_inject=array_merge($inject,$this->_inject);
@@ -22,7 +22,7 @@ class app {
 			$this->$name->$inj = $this->$inj;
 		}
 	}
-	public function _setFolder($dir) {
+	private function _setFolder($dir) {
 		$folders = [];
 	  	foreach(scandir($dir) as $file) {
 	  		if($file[0]==".") continue;

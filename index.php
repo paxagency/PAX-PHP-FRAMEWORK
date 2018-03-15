@@ -17,6 +17,12 @@ docs.paxagency.com/php
 ****************************************
 ****************************************/
 require_once('app/php/app/config.php');
+if(SITE_SSL) {
+	$ssl = ((isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO']=='https') || isset($_SERVER['HTTPS'])) ? 1 : 0;
+    header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+}
+
+if(SITE_ERRORS) ini_set('display_errors', 1);
 $_URL=explode('?',htmlspecialchars($_SERVER['REQUEST_URI']));
 $_URL=array_slice(explode('/',$_URL[0]),DIR_INDEX);
 

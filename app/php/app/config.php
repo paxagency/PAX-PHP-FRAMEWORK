@@ -1,6 +1,8 @@
 <?php
-// PAGES
-define('PAGE_PUBLIC', $_SERVER['HTTP_HOST']);
+// SITE
+define('SITE_PUBLIC', $_SERVER['HTTP_HOST']);
+define('SITE_ERRORS', 1);
+define('SITE_SSL', 0);
 // DIRECTORIES
 define('DIR_ROUTE',getcwd().'/app/php/pages/');
 define('DIR_INC',getcwd().'/app/php/includes/');
