@@ -5,7 +5,8 @@
 <h2>About PAX</h2>
 <p>PAX is a web application framework with minimalism in mind. It was created to have the lowest barrier of entry for beginners and designers, but still provide a succinct and powerful development environment for creating robust applications. PAX includes:</p>
 <ul>
+    <li><a href='http://docs.paxagency.com/php/intro/structure'>Simplistic File Structure</a></li>
     <li><a href='http://docs.paxagency.com/php/routing'>Automated Routing</a></li>
-    <li><a href='http://docs.paxagency.com/php/libraries/database'>Intuitive database ORM</a></li>
-    <li><a href='http://docs.paxagency.com/php/application/'>Dependency Injection Based Application Design</a></li>
+    <li><a href='http://docs.paxagency.com/php/libraries/database'>Intuitive Database ORM</a></li>
+    <li><a href='http://docs.paxagency.com/php/application/'>Effortless Application Design (Dependency Injection Focused)</a></li>
 </ul>
