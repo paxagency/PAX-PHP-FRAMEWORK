@@ -26,7 +26,18 @@ class db {
 		$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
-
+	/**
+	* Create Connection
+	* @param  string 	$server
+	* @param  string	$name
+	* @param  string  	$user
+	* @return string	$pass
+	*/
+	public function connect($server,$name,$user,$pass){
+		$this->connection = new \PDO('mysql:host='.$server.';dbname='.$name.';charset=utf8mb4', $user, $pass);
+		$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	}
 	/**
 	* Get One Row
 	* @param  string 		 $table
@@ -136,7 +147,7 @@ class db {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-	
+
 	/**
 	* Search Row
 	* @param  string   $table
