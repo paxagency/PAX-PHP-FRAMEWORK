@@ -11,9 +11,9 @@
 888    d88P     888d88P   Y88b
 
 PAX PHP Framework 1.1
-Copyright 2018 PAX Agency
+Copyright 2018 PAX Agency & MIT Licensed
 Created by Albert Kiteck
-docs.paxagency.com/php
+http://docs.paxagency.com/php
 ****************************************
 ****************************************/
 require_once('app/php/app/config.php');
@@ -22,9 +22,9 @@ if(SITE_SSL) {
 	if(!$ssl) header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 }
 if(SITE_ERRORS) ini_set('display_errors', 1);
+
 $_URL=explode('?',htmlspecialchars($_SERVER['REQUEST_URI']));
 $_URL=array_slice(explode('/',$_URL[0]),DIR_INDEX);
-
 $_PATH='error';
 $path='';
 foreach($_URL as $n=>$url) {
