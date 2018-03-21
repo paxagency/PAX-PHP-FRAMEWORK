@@ -293,7 +293,7 @@ class db {
         if($this->assoc($array[0])){
             foreach($array as $n=>$if) {
                 $key = key($if);
-                if($n) $str.=' '.$type.' ';
+                if($n) $str.=' '.strtoupper($type).' ';
                 $str.='('.$this->if($if[$key],$key).')';
             }
         } else {
