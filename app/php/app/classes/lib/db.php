@@ -125,7 +125,7 @@ class db {
 		$values = [];
 		if($query){
 			$build = $this->buildWhere($query);
-			$string = $build['query'];
+		 	$string = $build['query'];
 			$values = $build['values'];
 		}
 		$string = "SELECT COUNT(*) FROM ".$table.$string;
@@ -147,7 +147,6 @@ class db {
 		$query->execute($values);
 		return $query->rowCount();
 	}
-
 	/**
 	* Search Row
 	* @param  string   $table
@@ -282,70 +281,54 @@ class db {
         return ($array !== array_values($array));
     }
 	public function buildWhere($data){
-		$query=[];
-		if(isset($data['and'])) $query['and'] = $data['and'];
-		if(isset($data['or'])) $query['or'] = $data['or'];
-		if(!$query) return ['query'=>'','values'=>[]];;
-        $this->string = '';
+		if(!isset($data['and']) && !isset($data['or'])) return ['query'=>'','values'=>[]];
         $this->values = [];
-        $this->build($query);
-		if($this->string!='') $this->string = ' WHERE ('.$this->string;
-        return ['query'=>''.$this->string.') ','values'=>$this->values];
+		if(isset($data['and'])) $str=$this->if($data['and'],'AND');
+        if(isset($data['or'])) $str=$this->if($data['or'],'OR');
+		$str = ' WHERE '.$str.' ';
+        return ['query'=>$str,'values'=>$this->values];
     }
-	public function build($data,$bool='AND'){
-        if(!$this->assoc($data) && !$this->assoc($data[0])){
-            $build = $this->buildWhereBlock($data,$bool);
-            $this->string.=$build['string'];
-            foreach($build['values'] as $v) $this->values[] = $v;
-        } else {
-            $count = count($data)-1;
-            $prev_bool = $bool;
-            $n=0;
-            foreach($data as $key => $value){
-                if($this->assoc($value)) {
-                    $k = key($value);
-                    $this->string.='(';
-                    $this->build($value, strtoupper($k));
-                    $last = ($count==$key) ? 1 :0;
-                    if($last) $prev_bool = '';
-                    $this->string.=') '.$prev_bool.' ';
-                } else {
-                    if($n) $this->string.=") AND (";
-                    $this->build($value, strtoupper($key));
-                    $n++;
-                }
+	public function if($array,$type='AND'){
+        $str='';
+        if($this->assoc($array[0])){
+            foreach($array as $n=>$if) {
+                $key = key($if);
+                if($n) $str.=' '.$type.' ';
+                $str.='('.$this->if($if[$key],$key).')';
             }
+        } else {
+            $str.=$this->ifBlock($array,$type);
         }
+        return $str;
     }
-	public function buildWhereBlock($array,$bool='AND'){
-        $second = false;
-        $q='';
-		$values = [];
-       	foreach($array as $m){
+    public function ifBlock($array,$type='AND'){
+        $str='';
+       	foreach($array as $n=>$m){
            $key = $m[0];
            $action = strtoupper($m[1]);
-           $val = '';
-           if(isset($m[2])) {
-               if($action=='IN'){
-                   foreach($m[2] as $n=>$o){
-                       $val.=($n) ? ',' : '(';
-                       $values[]=$o;
-                       $val.='?';
-                   }
-                   $val.=')';
-               } elseif($action=='BETWEEN'){
-                   $values[]=$m[2][0];
-                   $values[]=$m[2][1];
-                   $val='? AND ?';
-               }else {
-                   $values[]=$m[2];
-                   $val='?';
-               }
-           }
-           $q.= ($second) ? " ".$bool." ".$key." ".$action." ".$val : $key." ".$action." ".$val;
-           $second = true;
+           $val = $this->ifValue($m[2],$action);
+           if($n) $str.=' '.strtoupper($type).' ';
+           $str.= $key." ".$action." ".$val;
        }
-       return ['string'=>$q,'values'=>$values];
+       return $str;
+   }
+   public function ifValue($v,$a){
+       $val = '';
+       if($a=='IN'){
+           foreach($v as $n=>$o){
+               $val.=($n) ? ',?' : '(?';
+               $this->values[]=$o;
+           }
+           $val.=')';
+       } elseif($a=='BETWEEN'){
+           $this->values[]=$v[0];
+           $this->values[]=$v[1];
+           $val='? AND ?';
+       } else {
+           $this->values[]=$v;
+           $val='?';
+       }
+       return $val;
    }
 }
 
