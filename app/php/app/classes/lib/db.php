@@ -314,7 +314,7 @@ class db {
    }
    public function ifValue($v,$a){
        $val = '';
-       if($a=='IN'){
+       if($a=='IN' || $a=='GREATEST' || $a=='NOT IN'){
            foreach($v as $n=>$o){
                $val.=($n) ? ',?' : '(?';
                $this->values[]=$o;
