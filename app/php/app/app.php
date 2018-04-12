@@ -5,13 +5,13 @@ class app {
 	public function __construct($classes=[],$autoload=[]) {
 		$this->_setFolder(DIR_CLASS);
 		$this->_autoload+=$autoload;
-		$this->load($this->_autoload,[],0);
+		$this->load($this->_autoload,[],false);
 		$this->load($classes);
 	}
-	public function load($classes=[],$inject=[],$autoload=1) {
-		if($classes) foreach($classes as $class) $this->_init($class,$inject,$autoload);
+	public function load($classes=[],$inject=[],$auto=true) {
+		if($classes) foreach($classes as $class) $this->_init($class,$inject,$auto);
 	}
-	public function _init($class,$inject=[],$autoload=1){
+	public function _init($class,$inject=[],$auto=true){
 		if(!isset($this->_folder[$class]) || isset($this->$class)) return;
 	  	require_once($this->_folder[$class]);
 		$this->$class = new $class();
