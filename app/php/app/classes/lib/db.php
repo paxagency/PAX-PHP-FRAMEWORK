@@ -297,7 +297,7 @@ class db {
                 $str.='('.$this->_if($if[$key],$key).')';
             }
         } else {
-            $str.=$this->_ifBlock($array,$type);
+            $str.=$this->ifBlock($array,$type);
         }
         return $str;
     }
@@ -306,7 +306,7 @@ class db {
        	foreach($array as $n=>$m){
            $key = $m[0];
            $action = strtoupper($m[1]);
-           $val = $this->_ifValue($m[2],$action);
+           $val = $this->ifValue($m[2],$action);
            if($n) $str.=' '.strtoupper($type).' ';
            $str.= $key." ".$action." ".$val;
        }
