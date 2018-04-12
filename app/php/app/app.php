@@ -28,13 +28,13 @@ class app {
 	private function _setFolder($dir) {
 		$folders = [];
 	  	foreach(scandir($dir) as $file) {
-	  		if($file[0]==".") continue;
-	    	if(is_dir($dir.$file)) {
-	        	$folders[] = $dir.$file;
-	    	} else {
+			if($file[0]==".") continue;
+			if(is_dir($dir.$file)) {
+				$folders[] = $dir.$file;
+			} else {
 				$name = str_replace('.php','',$file);
-	     		$this->_folder[$name] = $dir.$file;
-	    	}
+				$this->_folder[$name] = $dir.$file;
+			}
 	  	}
 	  	foreach($folders as $f) $this->_setFolder($f.'/');
 	}
