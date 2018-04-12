@@ -10,10 +10,10 @@
 888     d8888888888 d88P Y88b
 888    d88P     888d88P   Y88b
 
-DB V 1.0
-Copyright 2018 Pax Aagency
+PAX DB 1.0
+Copyright 2018 PAX Agency & MIT Licensed
 Created by Albert Kiteck
-www.paxagency.com
+http://docs.paxagency.com/php/libraries/database
 ****************************************
 ****************************************/
 
@@ -283,21 +283,21 @@ class db {
 	public function buildWhere($data){
 		if(!isset($data['and']) && !isset($data['or'])) return ['query'=>'','values'=>[]];
         $this->values = [];
-		if(isset($data['and'])) $str=$this->if($data['and'],'AND');
-        if(isset($data['or'])) $str=$this->if($data['or'],'OR');
+		if(isset($data['and'])) $str=$this->_if($data['and'],'AND');
+        if(isset($data['or'])) $str=$this->_if($data['or'],'OR');
 		$str = ' WHERE '.$str.' ';
         return ['query'=>$str,'values'=>$this->values];
     }
-	public function if($array,$type='AND'){
+	public function _if($array,$type='AND'){
         $str='';
         if($this->assoc($array[0])){
             foreach($array as $n=>$if) {
                 $key = key($if);
                 if($n) $str.=' '.strtoupper($type).' ';
-                $str.='('.$this->if($if[$key],$key).')';
+                $str.='('.$this->_if($if[$key],$key).')';
             }
         } else {
-            $str.=$this->ifBlock($array,$type);
+            $str.=$this->_ifBlock($array,$type);
         }
         return $str;
     }
@@ -306,7 +306,7 @@ class db {
        	foreach($array as $n=>$m){
            $key = $m[0];
            $action = strtoupper($m[1]);
-           $val = $this->ifValue($m[2],$action);
+           $val = $this->_ifValue($m[2],$action);
            if($n) $str.=' '.strtoupper($type).' ';
            $str.= $key." ".$action." ".$val;
        }

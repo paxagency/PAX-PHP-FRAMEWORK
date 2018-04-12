@@ -10,7 +10,7 @@ class crud {
         return $this->db->update($get[0],$get[1],$post);
     }
     public function delete($get=[],$post=[]) {
-        if(!$this->auth($get,1)) return 0;
+        if(!$this->auth($get)) return 0;
         return $this->db->delete($get[0],$get[1]);
     }
     public function count($get=[],$post=[]) {
