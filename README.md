@@ -7,6 +7,8 @@
 <ul>
     <li><a href='http://docs.paxagency.com/php/intro/structure'>Simplistic File Structure</a></li>
     <li><a href='http://docs.paxagency.com/php/routing'>Automated Routing</a></li>
+    <li><a href='http://docs.paxagency.com/php/application/#class'>Automated Namespacing</a></li>
     <li><a href='http://docs.paxagency.com/php/application/'>Effortless Application Design</a></li>
     <li><a href='http://docs.paxagency.com/php/libraries/database'>Intuitive Database ORM</a></li>
+    <li><a href='http://docs.paxagency.com/php/libraries/testing'>Congruent Unit Testing</a></li>
 </ul>
