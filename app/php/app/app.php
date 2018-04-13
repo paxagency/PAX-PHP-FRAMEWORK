@@ -15,7 +15,7 @@ class app {
 		if(!isset($this->_folder[$class]) || isset($this->$class)) return;
 	  	require_once($this->_folder[$class]);
 		$this->$class = new $class();
-		if($autoload) $inject+=$this->_autoload;
+		if($auto) $inject+=$this->_autoload;
 		if(isset($this->$class->_inject)) $inject+=$this->$class->_inject;
 		$this->_inject($class,$inject);
 	}
