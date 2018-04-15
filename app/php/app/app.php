@@ -4,7 +4,7 @@ class app {
 	private $_folder = [];
 	public function __construct($classes=[],$autoload=[]) {
 		$this->_setFolder(DIR_CLASS);
-		$this->_autoload+=$autoload;
+		$this->_autoload=array_merge($autoload,$this->_autoload);
 		$this->load($this->_autoload,[],false);
 		$this->load($classes);
 	}
@@ -15,8 +15,8 @@ class app {
 		if(!isset($this->_folder[$class]) || isset($this->$class)) return;
 	  	require_once($this->_folder[$class]);
 		$this->$class = new $class();
-		if($auto) $inject+=$this->_autoload;
-		if(isset($this->$class->_inject)) $inject+=$this->$class->_inject;
+		if($auto) $inject=array_merge($this->_autoload,$inject);
+		if(isset($this->$class->_inject)) $inject=array_merge($this->$class->_inject,$inject);
 		$this->_inject($class,$inject);
 	}
 	public function _inject($class,$inject){
