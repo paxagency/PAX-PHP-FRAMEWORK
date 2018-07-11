@@ -282,7 +282,8 @@ class db {
     }
 	public function buildWhere($data){
 		if(!isset($data['and']) && !isset($data['or'])) return ['query'=>'','values'=>[]];
-        $this->values = [];
+		$this->values = [];
+		$str = '';
 		if(isset($data['and'])) $str=$this->_if($data['and'],'AND');
 		if(isset($data['and']) && isset($data['or'])) $str.=' AND ';
         if(isset($data['or'])) $str.=$this->_if($data['or'],'OR');
