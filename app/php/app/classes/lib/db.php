@@ -284,7 +284,8 @@ class db {
 		if(!isset($data['and']) && !isset($data['or'])) return ['query'=>'','values'=>[]];
         $this->values = [];
 		if(isset($data['and'])) $str=$this->_if($data['and'],'AND');
-        if(isset($data['or'])) $str=$this->_if($data['or'],'OR');
+		if(isset($data['and']) && isset($data['or'])) $str.=' AND ';
+        if(isset($data['or'])) $str.=$this->_if($data['or'],'OR');
 		$str = ' WHERE '.$str.' ';
         return ['query'=>$str,'values'=>$this->values];
     }
