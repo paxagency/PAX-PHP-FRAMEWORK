@@ -19,47 +19,62 @@ http://docs.paxagency.com/php/libraries/testing
 class unitTest {
     public $pass=0;
     public $fail=0;
-    public function run($tests){
+    public $html='';
+    public $cli='';
+    public function __construct() {}
+    public function run($data){
+        $this->html = '';
+        $this->cli = '';
         $this->pass=0;
         $this->fail=0;
-        $_start_total = microtime(true);
-        $str = '';
+        $time_start = microtime(true);
         $n=1;
-        foreach($tests as $class=>$methods){
-            foreach($methods as $method=>$test){
-                if(!$this->is_assoc($test)){
-                    foreach($test as $t) {
-                        if(isset($t['skip'])) continue;
-                        $str.=$this->test($class,$method,$t,$n);
+        foreach($data as $class=>$methods){
+            foreach($methods as $method=>$tests){
+                if(!$this->is_assoc($tests)){
+                    foreach($tests as $test) {
+                        if(isset($test['skip'])) continue;
+                        $this->test($class,$method,$test,$n);
                         $n++;
                     }
                 } else {
-                    if(isset($test['skip'])) continue;
-                    $str.=$this->test($class,$method,$test,$n);
+                    if(isset($tests['skip'])) continue;
+                    $this->test($class,$method,$tests,$n);
                     $n++;
                 }
             }
         }
         $n--;
-        $_end_total = microtime(true);
-        $_time_total = number_format(($_end_total - $_start_total),10);
-        $_mem = (memory_get_peak_usage(true) / 1048576);
-        $_memUsed = (ceil((memory_get_peak_usage(false) / 1048576)*100)/100);
+        $this->render($time_start,$n);
+    }
+    public function render($time_start,$n){
+        $time_end = microtime(true);
+        $time_total = number_format(($time_end - $time_start),10);
+        $memory_total = (memory_get_peak_usage(true) / 1048576);
+        $memory_used = (ceil((memory_get_peak_usage(false) / 1048576)*100)/100);
         $percent = round($this->pass/$n*100);
+
         $errors = (!$this->fail) ? "<b style='color:green;'>PASSED: </b> {$n}/{$n} (100%)" : "<b style='color:red;'>FAILED</b>: ".$this->pass.'/'.$n.' ('.$percent.'%)';
-        echo '<p><b>TIME:</b> '.$_time_total.' Seconds  <b>MEMORY:</b> '.$_memUsed.'MB/'.$_mem.'MB '.$errors.'</p><table>'.$str.'</table>';
+        $this->html = '<p><b>TIME:</b> '.$time_total.' Seconds  <b>MEMORY:</b> '.$memory_used.'MB/'.$memory_total.'MB '.$errors.'</p><table>'.$this->html.'</table>';
+        $this->html.="<style> table{width:100%;}tr:nth-child(even){background:#f3f3f3;}td {padding:7px 15px;}body{font-family:Consolas,Monaco,Lucida Console,Courier New;}</style>";
+        $errors = (!$this->fail) ? "\e[42mPASSED\e[0m {$n}/{$n} (100%)" : "\e[1;37;41mFAILED\e[0m ".$this->pass.'/'.$n.' ('.$percent.'%)';
+        $this->cli = PHP_EOL.'TIME: '.$time_total.' Seconds MEMORY: '.$memory_used.'MB/'.$memory_total.'MB '.$errors.PHP_EOL.$this->cli.PHP_EOL.PHP_EOL;
     }
     public function test($class,$method,$test,$n=0){
         $_start = microtime(true);
         $val = (isset($test['vars'])) ? $this->$class->$method(...$test['vars']) : $this->$class->$method();
-
         $result = $this->result($test,$val);
         $_end = microtime(true);
         $_time = number_format(($_end - $_start),10);
-        $str = ($n) ? '<tr><td>'.$n.'. </td>' : '<tr>';
         ($result) ? $this->pass++ : $this->fail++;
-        $str .= ($result) ? '<td><span style="color:green;">PASSED</span>' : '<td><span style="color:red;">FAILED</span>';
-        return $str.='</td><td> <b>$'.$class.'->'.$method.'</b></td><td>'.$test['message'].'</td><td> '.$_time.' Seconds</td></tr> ';
+
+        $this->html.= ($n) ? '<tr><td>'.$n.'. </td>' : '<tr>';
+        $this->html.= ($result) ? '<td><span style="color:green;">PASSED</span>' : '<td><span style="color:red;">FAILED</span>';
+        $this->html.= '</td><td> <b>$'.$class.'->'.$method.'</b></td><td>'.$test['message'].'</td><td> '.$_time.' Seconds</td></tr> ';
+        
+        $this->cli.= ($n) ? PHP_EOL.$n.') ' : PHP_EOL;
+        $this->cli.= ($result) ? " PASSED " : "\e[1;37;41mFAILED\e[0m ";
+        $this->cli.= '$'.$class.'->'.$method.' | '.$test['message'].' | '.$_time.' Seconds';
     }
     public function result($data,$val){
         if(isset($data['and'])) return ($this->and($data['and'],$val)) ? 1 :0;

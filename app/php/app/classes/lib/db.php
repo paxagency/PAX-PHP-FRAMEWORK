@@ -81,9 +81,10 @@ class db {
 			if($second) $vars.=",";
 			$keys.=$k;
 			$vars.=':'.$k;
-			$values[':'.$k]=$v;
+			$values[':'.$k]=($v=='') ? null : $v;
 	 	 	$second = true;
 		}
+		
 		$string= "INSERT INTO ".$table." (".$keys.") VALUES ( ".$vars.")";
 		$query = $this->connection->prepare($string);
 		$query->execute($values);
@@ -104,7 +105,7 @@ class db {
 		foreach($data as $key=>$var) {
 			if($second) $q.=",";
 			$q.= $key."=?";
-			$values[]=$var;
+			$values[]=($var=='') ? null : $var;
 			$second = true;
 		}
 		$q.= " WHERE id=?";
@@ -164,7 +165,7 @@ class db {
 		$string = $build['query'];
 		$values = $build['values'];
 		$join = $this->buildJoin($query,$fields);
-
+		
 		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$join['string'].$string,$values) : null;
 		if(!$max) ['count'=>$query_count,'hits'=>[]];
 		$start = $page * $max;
