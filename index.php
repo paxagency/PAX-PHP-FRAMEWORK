@@ -23,8 +23,7 @@ if(SITE_SSL) {
 }
 if(SITE_ERRORS) ini_set('display_errors', 1);
 
-$_URL=explode('?',htmlspecialchars($_SERVER['REQUEST_URI']));
-$_URL=array_slice(explode('/',$_URL[0]),DIR_INDEX);
+$_URL=array_slice(explode('/',parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)),DIR_INDEX);
 $_PATH='error';
 $path='';
 foreach($_URL as $n=>$url) {
