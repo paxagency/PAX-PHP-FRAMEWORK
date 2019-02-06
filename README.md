@@ -9,6 +9,7 @@
     <li><a href='http://docs.paxagency.com/php/routing'>Automated Routing</a></li>
     <li><a href='http://docs.paxagency.com/php/application/#class'>Automated Namespacing</a></li>
     <li><a href='http://docs.paxagency.com/php/application/'>Effortless Application Design</a></li>
-    <li><a href='http://docs.paxagency.com/php/libraries/database'>Intuitive Database ORM</a></li>
-    <li><a href='http://docs.paxagency.com/php/libraries/testing'>Congruent Unit Testing</a></li>
+    <li><a href='http://docs.paxagency.com/php/libraries/seed'>Database Seeding</a></li>
+    <li><a href='http://docs.paxagency.com/php/libraries/db'>Intuitive Database ORM</a></li>
+    <li><a href='http://docs.paxagency.com/php/libraries/tests'>Congruent Unit Testing</a></li>
 </ul>

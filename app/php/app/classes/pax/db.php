@@ -1,22 +1,7 @@
 <?php
-/***************************************
-****************************************
-8888888b.     d8888Y88b   d88P
-888   Y88b   d88888 Y88b d88P
-888    888  d88P888  Y88o88P
-888   d88P d88P 888   Y888P
-8888888P" d88P  888   d888b
-888      d88P   888  d88888b
-888     d8888888888 d88P Y88b
-888    d88P     888d88P   Y88b
-
-PAX DB 1.0
-Copyright 2018 PAX Agency & MIT Licensed
-Created by Albert Kiteck
-http://docs.paxagency.com/php/libraries/database
-****************************************
-****************************************/
-
+/****************************************
+docs.paxagency.com/php/libraries/db
+*****************************************/
 class db {
 	public $connection;
 	public $string='';
@@ -69,28 +54,53 @@ class db {
 	/**
 	* Save New Row
 	* @param  string $table
-	* @param  array  $data
+	* @param  array  $data 
 	* @return integer
 	*/
   	public function save($table,$data){
-		$second = false;
 		$values = [];
 		$keys = $vars = '';
-		foreach($data as $k=>$v)  {
-			if($second) $keys.=",";
-			if($second) $vars.=",";
-			$keys.=$k;
-			$vars.=':'.$k;
-			$values[':'.$k]=($v=='') ? null : $v;
-	 	 	$second = true;
+		if($this->assoc($data)){
+			$second = false;
+			$vars = '(';
+			foreach($data as $k=>$v) {
+				if($second) {$keys.=","; $vars.=",";}
+				$keys.=$k;
+				$vars.=':'.$k;
+				$values[':'.$k]=$v;
+				$second = true;
+			}
+			$vars.=")";
+		} else {
+			$bulk = $this->formatBulk($data);
+			$keys = implode($bulk['keys'],',');
+			foreach($bulk['data'] as $n=>$d) {
+				if($n) $vars.=",";
+				$vars .= '(';
+				foreach($d as $i=>$v) {
+					$k = $bulk['keys'][$i];
+					if($i) $vars.=",";
+					$vars.=':'.$k.$n;
+					$values[':'.$k.$n]=$v;
+				}
+				$vars.=")";
+			}
 		}
-		
-		$string= "INSERT INTO ".$table." (".$keys.") VALUES ( ".$vars.")";
+		echo $string= "INSERT INTO ".$table." (".$keys.") VALUES  ".$vars;
 		$query = $this->connection->prepare($string);
 		$query->execute($values);
 		return $this->connection->lastInsertId();
   	}
-
+	public function formatBulk($data){
+		$headers = $results = [];
+		foreach($data as $obj){
+			foreach($obj as $k=>$b) if(!in_array($k,$headers)) $headers[] = $k;
+		}
+		foreach($data as $n=>$obj){
+			foreach($headers as $i=>$o) $results[$n][] = (isset($obj[$o])) ? $obj[$o] : null;
+		}
+		return ['keys'=>$headers,'data'=>$results];
+	}
 	/**
 	* Update Row
 	* @param  string   $table
@@ -105,7 +115,7 @@ class db {
 		foreach($data as $key=>$var) {
 			if($second) $q.=",";
 			$q.= $key."=?";
-			$values[]=($var=='') ? null : $var;
+			$values[]=$var;
 			$second = true;
 		}
 		$q.= " WHERE id=?";
@@ -165,7 +175,7 @@ class db {
 		$string = $build['query'];
 		$values = $build['values'];
 		$join = $this->buildJoin($query,$fields);
-		
+
 		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$join['string'].$string,$values) : null;
 		if(!$max) ['count'=>$query_count,'hits'=>[]];
 		$start = $page * $max;
@@ -250,7 +260,41 @@ class db {
 		$query->execute($values);
 		return $query->fetchColumn();
 	}
-
+	public function getType($p){
+		$v = [
+			'int'=>['type'=>' int(10) ','null'=>' NOT NULL ','default'=>''],
+			'key'=>['type'=>' int(10) ','null'=>' unsigned NOT NULL AUTO_INCREMENT','default'=>''],
+			'tinyint'=>['type'=>' tinyint(4) ','null'=>' NOT NULL','default'=>'0'],
+			'string'=>['type'=>' varchar(191)','null'=>' COLLATE utf8mb4_unicode_ci NOT NULL ','default'=>''],
+			'date'=>['type'=>' timestamp ','null'=>' NULL ','default'=>'NULL'],
+			'datetime'=>['type'=>' timestamp','null'=>' NULL ','default'=>'NULL'],
+			'medium'=>['type'=>' mediumtext','null'=>' NULL ','default'=>''],
+		];
+		$o = $v[$p['type']];
+		$str=$o['type'];
+		$str.=(isset($p['null'])) ? $p['null'] : $o['null'];
+		$default = (isset($p['default'])) ? (string)$p['default'] : $o['default'];
+		if($default!='') $default = ' DEFAULT '.$default;
+		return $str.=$default;
+	}
+	public function setup($map){
+		$query = $this->connection->query("DROP DATABASE ".DB_NAME.";");
+		$query = $this->connection->query("CREATE DATABASE ".DB_NAME.";");
+		$this->__construct();
+		$sql='';
+		foreach($map['tables'] as $table=>$rows){
+			$sql="CREATE TABLE IF NOT EXISTS {$table} (";
+			foreach($rows as $n=>$r) {
+				if($n) $sql.=', ';
+				$sql.='`'.$r.'` '.$this->getType($map['fields'][$r]);
+			}
+			$sql.=", PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; ";
+			//echo $sql.'<br />';
+			$this->connection->query($sql);
+		}
+		
+		return $sql;
+	}
 	public function buildJoin($query,$fields){
 		if(!isset($query['join'])) {
 			$vals = (!$fields) ? '*' : implode(',',$fields);
@@ -283,11 +327,9 @@ class db {
     }
 	public function buildWhere($data){
 		if(!isset($data['and']) && !isset($data['or'])) return ['query'=>'','values'=>[]];
-		$this->values = [];
-		$str = '';
+        $this->values = [];
 		if(isset($data['and'])) $str=$this->_if($data['and'],'AND');
-		if(isset($data['and']) && isset($data['or'])) $str.=' AND ';
-        if(isset($data['or'])) $str.=$this->_if($data['or'],'OR');
+        if(isset($data['or'])) $str=$this->_if($data['or'],'OR');
 		$str = ' WHERE '.$str.' ';
         return ['query'=>$str,'values'=>$this->values];
     }

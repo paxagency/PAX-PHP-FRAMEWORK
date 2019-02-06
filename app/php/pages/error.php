@@ -1,2 +1,3 @@
-<h1>Oops.</h1>
-<h2>We couldn't find what you are looking for.</h2>
+<h1 style='text-align:center;font-family:"Helvetica Neue","Helvetica",arial; font-weight:200;'>
+    <span style='font-size:2em;font-weight:900;'>ERROR </span><br />We couldn't find anything.
+</h1>
