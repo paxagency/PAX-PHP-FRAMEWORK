@@ -1,13 +1,27 @@
 <?php
+$errors = [];
+$referer  = ($_SERVER['HTTP_REFERER']=='') ? 0 : $_SERVER['HTTP_REFERER'];
 $path = $_URL[2];
-if(!isset($path)) header('location:'.$_SERVER['HTTP_REFERER']);
 $function = $_URL[3];
-if(!isset($function)) header('location:'.$_SERVER['HTTP_REFERER']);
+
+if(!isset($path)) $errors[] = ['error'=>1,'message'=>'Must include class name in url path.'];
+if(!isset($function))  $errors[] = ['error'=>1,'message'=>'Must include method name in url path.'];
+if(!isset($app->_folder[$path])) $errors[] = ['error'=>1,'message'=>'This class does not exist.'];
+if($errors && !$referer) {
+    echo '<pre>'.json_encode($errors,JSON_PRETTY_PRINT).'</pre>';
+    return;
+}
+if($errors) header('location:'.$referer);
+
 array_splice($_URL,0,4);
 $_URL = array_values($_URL);
 $app->load([$path]);
 $call = $app->$path->$function($_URL,$_POST);
-$url = (isset($call['url'])) ? $call['url'] : $_SERVER['HTTP_REFERER'];
-header('location:'.$url);
+$url = (isset($call['url'])) ? $call['url'] : $referer;
+if($url) {
+    header('location:'.$url); 
+} else {
+    echo '<pre>'.json_encode($call,JSON_PRETTY_PRINT).'</pre>';
+}
 exit;
 ?>

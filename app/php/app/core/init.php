@@ -15,5 +15,5 @@ foreach($_URL as $n=>$url) {
 	if(file_exists(DIR_PAGE.$path.'.php')) {$_PATH=$path.'.php';$_PAGE=$url;break;}
 }
 if($_PATH=='error.php' && file_exists(DIR_PAGE.$path.'/index.php')) {$_PATH = $path.'/index.php'; $_PAGE='index';}
-require_once(DIR_TEMP.'template.php');
+require_once(DIR_APP.'core/template.php');
 ?>
