@@ -4,4 +4,5 @@
     <button onclick='window.location.href = "api/json_pretty/seed/search";'>Local Database</button>
     <button onclick='window.location.href = "api/json_pretty/seed/generate";'>Seed Database</button>
     <button onclick='window.location.href = "api/test/run";'>Run Tests</button>
+    <button onclick='window.location.href = "http://docs.paxagency.com/php/package";'>Package Manager</button>
 </h1>
