@@ -3,7 +3,7 @@ class app {
 	public $_autoload = ['session'];
 	public $_folder = [];
 	public function __construct($classes=[],$autoload=[]) {
-		$this->_setFolder(DIR_APP.'classes/');
+		$this->_setFolder(DIR_CORE.'app/');
 		$this->_autoload=array_merge($autoload,$this->_autoload);
 		$this->load($this->_autoload,[],false);
 		$this->load($classes);

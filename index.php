@@ -7,7 +7,7 @@ define('APP_NAME', 'Project');
 define('APP_VERSION', '0.0.1');
 define('APP_LICENSE', 'MIT');
 define('APP_AUTHOR', 'John Smith');
-define('APP_PACKAGE', 0);
-define('ROUTE_MODE', 'PHP');
-require_once('app/php/app/core/init.php'); 
+define('APP_PACKAGE', 1);
+define('APP_ROUTE_ALL', 0);
+require_once('app/core/sys/init.php'); 
 ?>

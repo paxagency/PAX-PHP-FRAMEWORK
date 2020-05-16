@@ -1,0 +1,13 @@
+{
+    "name": "project",
+    "version": "0.0.1",
+    "author": "John Smith <john@smith.org>",
+    "main":"/public/app.js",
+    "style":"/public/app.css",
+    "dependencies":{
+        //"jquery":"^3.4.1"
+    },
+    "css":["/src/css/*"],
+    "js":["/src/js/*"]
+}
+

@@ -7,9 +7,13 @@ class db {
 	public $string='';
 	public $values = [];
  	public function __construct() {
-        $this->connection = new \PDO('mysql:host='.DB_SERVER.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS);
-		$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        try {
+            $this->connection = new \PDO('mysql:host='.DB_SERVER.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS);
+        } catch(PDOException $exception ) {}
+		if($this->connection) {
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        }
     }
 	/**
 	* Create Connection

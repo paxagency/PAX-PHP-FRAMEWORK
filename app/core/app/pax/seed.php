@@ -6,8 +6,8 @@ class seed {
     private $data = '';
     private $map = '';
     public function __construct() {
-        $this->data = json_decode($this->removeComments(file_get_contents(DIR_APP.'db/database.json')),true);
-        $this->map = json_decode($this->removeComments(file_get_contents(DIR_APP.'db/map.json')),true);
+        $this->data = json_decode($this->removeComments(file_get_contents(DIR_CORE.'db/database.json')),true);
+        $this->map = json_decode($this->removeComments(file_get_contents(DIR_CORE.'db/map.json')),true);
     }
     public function removeComments($input){
         return preg_replace('#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#','$1',$input);
@@ -20,12 +20,12 @@ class seed {
         return ['success'=>1];
     }
     public function setup($get=[],$post=[]) {
-        if(!isset($this->db)) return ['error'=>'Database not injected'];
+        if(!isset($this->db) || !$this->db->connection) return ['error'=>'Database not injected'];
         $this->db->setup($this->map);
         return ['success'=>1];
     }
     public function generate($get=[],$post=[]) {
-        if(!isset($this->db)) return ['error'=>'Database not injected'];
+        if(!isset($this->db) || !$this->db->connection)  return ['error'=>'Database not connected'];
         $this->db->setup($this->map);
         foreach($this->map['tables'] as $t=>$o) {
             if(isset($this->data[$t])) $this->db->save($t,$this->data[$t]);
