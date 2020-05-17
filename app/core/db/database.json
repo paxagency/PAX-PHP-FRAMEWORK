@@ -1,24 +1,26 @@
 {
-	"users":[
-		{
-			"id":"1",
-			"email":"john@website.com",
-			"first_name":"john",
-			"last_name":"smith",
-			"password":"$2y$10$frXQ6bvRvYijQBHuHi4FtO7c.shndDIAO6K6GXOWgzQrBi6Jg5HrK",
-			"password_reset":"234KDJSDF3SDF"
-		}
-	],
-	"pages":[
-		{
-			"id":"1",
-			"name":"home",
-			"description":"Welcome to my website"
-		},
-		{
-			"id":"2",
-			"name":"about",
-			"description":"About us"
-		}
-	]
+    "dbName":{
+        "users":[
+            {
+                "id":"1",
+                "email":"john@website.com",
+                "first_name":"john",
+                "last_name":"smith",
+                "password":"$2y$10$frXQ6bvRvYijQBHuHi4FtO7c.shndDIAO6K6GXOWgzQrBi6Jg5HrK",
+                "password_reset":"234KDJSDF3SDF"
+            }
+        ],
+        "pages":[
+            {
+                "id":"1",
+                "name":"home",
+                "description":"Welcome to my website"
+            },
+            {
+                "id":"2",
+                "name":"about",
+                "description":"About us"
+            }
+        ]
+    }
 }
