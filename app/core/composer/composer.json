@@ -1,0 +1,13 @@
+{
+    "name": "user/app",
+    "description": "library",
+    "require": {
+        "google/apiclient": "*"
+    },
+    "authors": [
+        {
+            "name": "John Smith",
+            "email": "john@smith.com"
+        }
+    ]
+}
