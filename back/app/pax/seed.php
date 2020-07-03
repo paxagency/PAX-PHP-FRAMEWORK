@@ -6,8 +6,9 @@ class seed {
     private $data = '';
     private $map = '';
     public function __construct() {
-        $this->data = json_decode($this->removeComments(file_get_contents(DIR_CORE.'db/database.json')),true);
-        $this->map = json_decode($this->removeComments(file_get_contents(DIR_CORE.'db/map.json')),true);
+        $this->data = json_decode($this->removeComments(file_get_contents(DIR_DB.'database.json')),true);
+        $this->data =  $this->data[DB_NAME];
+        $this->map = json_decode($this->removeComments(file_get_contents(DIR_DB.'map.json')),true);
     }
     public function removeComments($input){
         return preg_replace('#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#','$1',$input);
