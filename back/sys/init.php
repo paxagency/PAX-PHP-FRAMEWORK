@@ -5,6 +5,7 @@ docs.paxagency.com/php
 require_once('back/sys/config.php');
 if(SITE_ERRORS) ini_set('display_errors', 1);
 if(SITE_SSL) {if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTP_X_FORWARDED_PROTO']!='https') header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);}
+if(SITE_WWW && strpos($_SERVER['HTTP_HOST'],"www.")===false)  header('Location: '.$_SERVER['REQUEST_SCHEME'].'://www.'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
 $_URL=array_slice(explode('/',parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH)),SITE_URL_INDEX);
 $_PATH='error.html';

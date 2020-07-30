@@ -3,6 +3,7 @@
 define('SITE_PUBLIC', $_SERVER['HTTP_HOST'].'/');
 define('SITE_ERRORS', 1);
 define('SITE_SSL', 0);
+define('SITE_WWW', 0);
 define('SITE_URL_INDEX',1);
 // DIRECTORIES
 define('DIR_BACK',getcwd().'/back/');
