@@ -11,10 +11,12 @@ $_URL=array_slice(explode('/',parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH)),S
 $_PATH='error.html';
 $_PAGE = 'error';
 $path='';
+
 foreach($_URL as $n=>$url) {
-    $path.=($n)?'/'.$url:$url;
-    if(file_exists(DIR_PAGE.$path.'/index.html')) {$_PATH = $path.'/index.html';$_PAGE='index';break;}
-	if(file_exists(DIR_PAGE.$path.'.html')) {$_PATH=$path.'.html';$_PAGE=$url;break;}
+    $path.=($n && $url!='')?'/'.$url:$url;
+    if(file_exists(DIR_PAGE.$path.'/index.html')) {$_PATH = $path.'/index.html';$_PAGE='index';}
+    if(file_exists(DIR_PAGE.$path.'.html')) {$_PATH=$path.'.html';$_PAGE=$url;break;}
 }
+
 require_once(DIR_SYS.'template.php');
 ?>

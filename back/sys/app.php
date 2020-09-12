@@ -1,29 +1,19 @@
 <?php
 class app {
-	public $_autoload = ['session'];
-	public $_folder = [];
-	public function __construct($classes=[],$autoload=[]) {
-		$this->_setFolder(DIR_APP);
-		$this->_autoload=array_merge($autoload,$this->_autoload);
-		$this->load($this->_autoload,[],false);
+    public $_folder = [];
+	public function __construct($classes=[]) {
+        $this->_setFolder(DIR_APP);
 		$this->load($classes);
+    }
+	public function load($classes=[]) {
+        if($classes) foreach($classes as $class) $this->_init($class);
 	}
-	public function load($classes=[],$inject=[],$auto=true) {
-		if($classes) foreach($classes as $class) $this->_init($class,$inject,$auto);
-	}
-	public function _init($class,$inject=[],$auto=true){
-		if(!isset($this->_folder[$class]) || isset($this->$class)) return;
-	  	require_once($this->_folder[$class]);
-		$this->$class = new $class();
-		if($auto) $inject=array_merge($this->_autoload,$inject);
-		if(isset($this->$class->_inject)) $inject=array_merge($this->$class->_inject,$inject);
-		$this->_inject($class,$inject);
-	}
-	public function _inject($class,$inject){
-		foreach($inject as $inj) {
-			$this->_init($inj);
-			$this->$class->$inj = $this->$inj;
-		}
+	public function _init($class){
+        if(!isset($this->_folder[$class]) || isset($this->$class)) return;
+        require_once($this->_folder[$class]);
+        $this->$class = new $class();
+        if(!isset($this->$class->_ignore)) $this->$class->app = $this;
+        if(isset($this->$class->_inject)) foreach($this->$class->_inject as $cl) $this->_init($cl);
 	}
 	private function _setFolder($dir) {
 		$folders = [];

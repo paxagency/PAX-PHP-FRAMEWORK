@@ -3,13 +3,14 @@
 docs.paxagency.com/php/libraries/db
 *****************************************/
 class db {
+    public $_ignore=1;
 	public $connection;
 	public $string='';
 	public $values = [];
  	public function __construct() {
         try {
             $this->connection = new \PDO('mysql:host='.DB_SERVER.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS);
-        } catch(PDOException $exception ) {}
+            } catch(PDOException $exception ) {}
 		if($this->connection) {
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);

@@ -3,7 +3,7 @@
 docs.paxagency.com/php/routing 
 *****************************/
 require_once(FILE_APP);
-$app = new app(['session','package'],['elastic','token']);
+$app = new app(['session','package','crud']);
 
 if($_URL[0]=='api') return require_once(DIR_SYS.'api/'.$_URL[1].'.php');
 require_once(DIR_TEMP.'header.html');

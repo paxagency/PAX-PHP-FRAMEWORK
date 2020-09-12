@@ -48,7 +48,7 @@ class tests {
     }
     public function test($class,$method,$test,$n=0){
         $_start = microtime(true);
-        $val = (isset($test['vars'])) ? $this->$class->$method(...$test['vars']) : $this->$class->$method();
+        $val = (isset($test['vars'])) ? $this->app->$class->$method(...$test['vars']) : $this->app->$class->$method();
         $result = $this->result($test,$val);
         $_end = microtime(true);
         $_time = number_format(($_end - $_start),10);

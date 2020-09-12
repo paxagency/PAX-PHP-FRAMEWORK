@@ -1,5 +1,5 @@
 <?php
-$app->load(['tests'],['modelExample']);
+$app->load(['tests','modelExample']);
 if(isset($_URL[2]))  {
 $app->tests->run([
     'modelExample'=>[
