@@ -1,7 +1,7 @@
 <?php
-$app->load(['tests','modelExample']);
+
 if(isset($_URL[2]))  {
-$app->tests->run([
+$app->get('tests')->run([
     'modelExample'=>[
         'getString'=>[
             'func'=>'is_string',

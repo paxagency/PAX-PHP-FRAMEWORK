@@ -15,8 +15,7 @@ if($errors) header('location:'.$referer);
 
 array_splice($_URL,0,4);
 $_URL = array_values($_URL);
-$app->load([$path]);
-$call = $app->$path->$function($_URL,$_POST);
+$call = $app->get($path)->$function($_URL,$_POST);
 $url = (isset($call['url'])) ? $call['url'] : $referer;
 if($url) {
     header('location:'.$url); 

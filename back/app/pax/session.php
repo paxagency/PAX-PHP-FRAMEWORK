@@ -3,7 +3,6 @@
 docs.paxagency.com/php/libraries/session
 *****************************************/
 class session {
-    public $_ignore=1;
 	public $data = [];
 	public function __construct($session_id = '',  $key = 'default') {
 		if (!session_id()) {

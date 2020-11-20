@@ -1,6 +1,5 @@
 <?php
 class controlExample {
-    public function __construct() {}
     public function getString($get=[],$post=[]) {
         return "Class Called";
     }

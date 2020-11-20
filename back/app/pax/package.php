@@ -3,7 +3,6 @@
 docs.paxagency.com/php/libraries/package
 *****************************************/
 class package {
-    public $_ignore=1;
     public $_folder = [];
     public $libs = '';
     public $js='';

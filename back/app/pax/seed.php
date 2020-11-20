@@ -66,7 +66,7 @@ class seed {
     }
     public function query($data,$post,$start,$end){
         $array1 = $array2 = [];
-        $query = $post['query'];
+        $query = $post['query'] ?? [];
         
         foreach($data as $n=>$row) {
             $add = 1;

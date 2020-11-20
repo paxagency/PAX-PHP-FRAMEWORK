@@ -1,19 +1,16 @@
 <?php
 class app {
     public $_folder = [];
-	public function __construct($classes=[]) {
+	public function __construct() {
         $this->_setFolder(DIR_APP);
-		$this->load($classes);
     }
-	public function load($classes=[]) {
-        if($classes) foreach($classes as $class) $this->_init($class);
-	}
-	public function _init($class){
-        if(!isset($this->_folder[$class]) || isset($this->$class)) return;
-        require_once($this->_folder[$class]);
-        $this->$class = new $class();
-        if(!isset($this->$class->_ignore)) $this->$class->app = $this;
-        if(isset($this->$class->_inject)) foreach($this->$class->_inject as $cl) $this->_init($cl);
+	public function get($class){
+		if(!isset($this->$class)) {
+			require_once($this->_folder[$class]);
+			$this->$class = new $class();
+			if(property_exists($class,'app')) $this->$class->app = $this;
+		}
+		return $this->$class;
 	}
 	private function _setFolder($dir) {
 		$folders = [];

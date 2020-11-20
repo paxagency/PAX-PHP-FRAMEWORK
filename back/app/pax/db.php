@@ -3,7 +3,6 @@
 docs.paxagency.com/php/libraries/db
 *****************************************/
 class db {
-    public $_ignore=1;
 	public $connection;
 	public $string='';
 	public $values = [];

@@ -1,43 +1,43 @@
 <?php
 class crud {
-    public $_inject = ['seed','token'];
+    public $app;
     public $active = 'seed';  
     public function seed($get=[],$post=[]) {
-        return $this->app->{$this->active}->seed(DB_NAME,$this->seed->data[DB_NAME],$this->seed->map[DB_NAME]);
+        return $this->app->get($this->active)->seed();
     }
     public function save($get=[],$post=[]) {
         $auth = $this->auth($get,$post,'save');
         if(!$auth) return ['error'=>1,'message'=>'You must be logged in'];
-        $save = $this->app->{$this->active}->save($auth['get'][0],$auth['post']);
+        $save = $this->app->get($this->active)->save($auth['get'][0],$auth['post']);
         return $save;
     }
     public function update($get=[],$post=[]) {
         if(!$this->auth($get,$post,'update')) return ['error'=>1,'message'=>'You must be logged in'];
-        $update = $this->app->{$this->active}->update($get[0],$get[1],$post);
+        $update = $this->app->get($this->active)->update($get[0],$get[1],$post);
         return $update;
     }
     public function delete($get=[],$post=[]) {
         if(!$this->auth($get,$post,'delete')) return ['error'=>1,'message'=>'You must be logged in'];
-        $del =  $this->app->{$this->active}->delete($get[1],$get[0]);
+        $del =  $this->app->get($this->active)->delete($get[1],$get[0]);
         return $del;
     }
     public function count($get=[],$post=[]) {
         if(!$this->auth($get,$post,'count')) return ['error'=>1,'message'=>'You must be logged in'];
-        return $this->app->{$this->active}->count($get[0],$post);
+        return $this->app->get($this->active)->count($get[0],$post);
     }
     public function get($get=[],$post=[]){
         if(!$this->auth($get,$post,'get')) return ['error'=>1,'message'=>'You must be logged in'];
         $key = (isset($get[2]) && $get[2]!='') ? $get[2] : 'id';
-        return $this->app->{$this->active}->get($get[0],$get[1],$key);
+        return $this->app->get($this->active)->get($get[0],$get[1],$key);
     }
     public function search($get=[],$post=[]) {
         if(!$this->auth($get,$post,'search')) return ['hits'=>[],'count'=>0,'error'=>1,'message'=>'No Access'];
         $type = $get[0] ?? '';
-        $max = ($get[1] && is_numeric($get[1])) ? $get[1]: 12;
-        $page = ($get[2] && is_numeric($get[2])) ? $get[2] : 0;
+        $max = $get[1] ?? 10;
+        $page = $get[2] ?? 0;
         $sort = $get[3] ?? 'asc';
         $order = $get[4] ?? 'id';
-        return $this->app->{$this->active}->search($type,$post,$max,$page,$sort,$order);
+        return $this->app->get($this->active)->search($type,$post,$max,$page,$sort,$order);
     }
     public function select($get=[],$post=[]) {
         if(!$this->auth($get,$post,'search')) return ['hits'=>[],'count'=>0,'error'=>1,'message'=>'No Access'];

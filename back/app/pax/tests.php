@@ -3,6 +3,7 @@
 docs.paxagency.com/php/libraries/tests
 *****************************************/
 class tests {
+    public $app;
     public $pass=0;
     public $fail=0;
     public $html='';
@@ -48,7 +49,7 @@ class tests {
     }
     public function test($class,$method,$test,$n=0){
         $_start = microtime(true);
-        $val = (isset($test['vars'])) ? $this->app->$class->$method(...$test['vars']) : $this->app->$class->$method();
+        $val = (isset($test['vars'])) ? $this->app->get($class)->$method(...$test['vars']) : $this->app->get($class)->$method();
         $result = $this->result($test,$val);
         $_end = microtime(true);
         $_time = number_format(($_end - $_start),10);

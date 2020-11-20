@@ -3,7 +3,6 @@
 docs.paxagency.com/php/libraries/token
 *****************************************/
 class token {
-    public $_ignore = 1;
     public $key = 'nhU0FxpV2SVL57SfG6dC7GvwsJYBidSE';
     public $algos = [
         'HS256' => ['hash_hmac', 'SHA256'],
