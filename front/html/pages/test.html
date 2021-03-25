@@ -1,6 +1,6 @@
 <?php
 
-if(isset($_URL[2]))  {
+if(isset($_URL[1]))  {
 $app->get('tests')->run([
     'modelExample'=>[
         'getString'=>[
@@ -28,5 +28,5 @@ echo $app->tests->html;
 }
 ?>
 <style> table{width:100%;}tr:nth-child(even){background:#f3f3f3;}td {padding:7px 15px;}body{font-family:Consolas,Monaco,Lucida Console,Courier New;}</style>
-<button onclick='window.location.href = "/api/test/run"' style='width:100%;font-size:18px;padding:10px;'>Run Test</button>
+<button onclick='window.location.href = "/test/run"' style='width:100%;font-size:18px;padding:10px;'>Run Test</button>
 <?php exit; ?>
