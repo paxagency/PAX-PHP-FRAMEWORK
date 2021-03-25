@@ -1,6 +1,6 @@
 <?php
 class modelExample {
-	public $inject = ["controlExample"];
+	public $inject = ["utilExample"];
     public function __construct() {}
     public function getString($get=[],$post=[]) {
         return "Class Called";
@@ -13,6 +13,9 @@ class modelExample {
     }
     public function getAssoc($get=[],$post=[]) {
         return ['success'=>1];
+    }
+    public function useInjection($get=[],$post=[]) {
+        return $this->utilExample->roundNumber(1000.234233425);
     }
 }
 ?>
