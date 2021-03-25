@@ -8,7 +8,14 @@ class app {
 		if(!isset($this->$class)) {
 			require_once($this->_folder[$class]);
 			$this->$class = new $class();
-			if(property_exists($class,'app')) $this->$class->app = $this;
+			if(property_exists($class,'app')) {
+				$this->$class->app = $this;
+			}
+			if(property_exists($class,'inject')) {
+				foreach($this->$class->inject as $inject) {
+					$this->$class->$inject = $this->get($inject);
+				}
+			}
 		}
 		return $this->$class;
 	}

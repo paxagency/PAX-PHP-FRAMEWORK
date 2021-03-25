@@ -1,5 +1,6 @@
 <?php
 class modelExample {
+	public $inject = ["controlExample"];
     public function __construct() {}
     public function getString($get=[],$post=[]) {
         return "Class Called";
