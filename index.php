@@ -1,6 +1,6 @@
 <?php
 /*****************************
-docs.paxagency.com/php V 1.6.0 
+docs.paxagency.com/php V 1.7.0 
 mit license • by albert kiteck
 *****************************/
 define('APP_NAME', 'Project');
