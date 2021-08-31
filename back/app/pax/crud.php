@@ -3,7 +3,9 @@ class crud {
     public $app;
     public $active = 'seed';  
     public function seed($get=[],$post=[]) {
-        return $this->app->get($this->active)->seed(DB_NAME, $this->app->get('seed')->data[DB_NAME], $this->app->get('seed')->map[DB_NAME]);
+    	$data = (isset($this->app->get('seed')->data[DB_NAME])) ? $this->app->get('seed')->data[DB_NAME] : [];
+    	$map = (isset($this->app->get('seed')->map[DB_NAME])) ? $this->app->get('seed')->map[DB_NAME] : [];
+        return $this->app->get($this->active)->seed(DB_NAME, $data, $map);
     }
     public function save($get=[],$post=[]) {
         $auth = $this->auth($get,$post,'save');
