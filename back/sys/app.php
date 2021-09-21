@@ -5,19 +5,17 @@ class app {
         $this->_setFolder(DIR_APP);
     }
 	public function get($class){
-		if(!isset($this->$class)) {
+		if(!isset($this->$class) && isset($this->_folder[$class])) {
 			require_once($this->_folder[$class]);
 			$this->$class = new $class();
-			if(property_exists($class,'app')) {
-				$this->$class->app = $this;
-			}
+			if(property_exists($class,'app')) $this->$class->app = $this;
 			if(property_exists($class,'inject')) {
 				foreach($this->$class->inject as $inject) {
 					$this->$class->$inject = $this->get($inject);
 				}
 			}
 		}
-		return $this->$class;
+		return (isset($this->$class)) ? $this->$class : [];
 	}
 	private function _setFolder($dir) {
 		$folders = [];

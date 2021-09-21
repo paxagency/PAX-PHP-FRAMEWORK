@@ -29,37 +29,24 @@ class crud {
     }
     public function get($get=[],$post=[]){
         if(!$this->auth($get,$post,'get')) return ['error'=>1,'message'=>'You must be logged in'];
-        $key = (isset($get[2]) && $get[2]!='') ? $get[2] : 'id';
-        return $this->app->get($this->active)->get($get[0],$get[1],$key);
+        $key = (isset($get[2]) && $get[2]!='') ? [$get[2]=>$get[1]] : $get[1];
+        return $this->app->get($this->active)->get($get[0],$key);
     }
     public function search($get=[],$post=[]) {
         if(!$this->auth($get,$post,'search')) return ['hits'=>[],'count'=>0,'error'=>1,'message'=>'No Access'];
-        $type = $get[0] ?? '';
-        $max = $get[1] ?? 10;
-        $page = $get[2] ?? 0;
-        $sort = $get[3] ?? 'asc';
-        $order = $get[4] ?? 'id';
+        $type = (isset($get[0])) ? $get[0] : '';
+        $max = (isset($get[1]) && is_numeric($get[1])) ? $get[1] : 10;
+        $page = (isset($get[2])  && is_numeric($get[2])) ? $get[2] : 0;
+        $sort = (isset($get[3])) ? $get[3] : 'asc';
+        $order = (isset($get[4])) ? $get[4] : 'id';
+        $count =  (isset($get[5])  && is_numeric($get[5])) ? $get[5] : 1;
         return $this->app->get($this->active)->search($type,$post,$max,$page,$sort,$order);
-    }
-    public function select($get=[],$post=[]) {
-        if(!$this->auth($get,$post,'search')) return ['hits'=>[],'count'=>0,'error'=>1,'message'=>'No Access'];
-        $type = $get[0] ?? '';
-        $key = $get[1] ?? 'name';
-        $keyId = $get[2] ?? 'id';
-        $search = $this->search([$type,1000],$post);
-        $array =  [['id'=>'','text'=>'']];
-        foreach($search['hits'] as $n=>$t) {
-            $val = "";
-            $exp = explode(",",$key);
-            foreach($exp as $i=>$e) $val.=($i) ? " ".$t[$e] : $t[$e];
-            $id = (isset($t[$keyId])) ? $t[$keyId] : $n;
-            $array[]=['id'=>$id,'text'=>$val];
-        }
-        return $array;   
     }
     public function auth($get=[],$post=[],$method=''){
         //WRITE CUSTOM AUTH FUNCTION
         if(!isset($get[0])) return 0;
+        $req = ["get","update","delete"];
+        if(in_array($method,$req) && !isset($get[1])) return 0;
         return ['get'=>$get,'post'=>$post];
     }
 }
