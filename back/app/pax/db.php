@@ -6,14 +6,15 @@ class db {
 	public $connection;
 	public $string='';
 	public $values = [];
+	private $displayErrors = true;
  	public function __construct() {
         try {
-            $this->connection = new \PDO('mysql:host='.DB_SERVER.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS);
-            } catch(PDOException $exception ) {}
-		if($this->connection) {
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        }
+			$this->connection = new \PDO('mysql:host='.DB_SERVER.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS);
+			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		} catch(PDOException $exception ) {
+			return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
     }
 	/**
 	* Create Connection
@@ -49,12 +50,17 @@ class db {
 			$string.= " WHERE id=?";
 			$values[]=$data;
 		}
-		$query = $this->connection->prepare($string);
-		$query->execute($values);
-		$results = $query->fetchAll(PDO::FETCH_ASSOC);
-		return ($results) ? $results[0] : $results;
+		
+		try {
+			$query = $this->connection->prepare($string);
+			$query->execute($values);
+			$results = $query->fetchAll(PDO::FETCH_ASSOC);
+			return ($results) ? $results[0] : $results;
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
   	}
-
+  	
 	/**
 	* Save New Row
 	* @param  string $table
@@ -90,10 +96,14 @@ class db {
 				$vars.=")";
 			}
 		}
-		echo $string= "INSERT INTO ".$table." (".$keys.") VALUES  ".$vars;
-		$query = $this->connection->prepare($string);
-		$query->execute($values);
-		return $this->connection->lastInsertId();
+		$string= "INSERT INTO ".$table." (".$keys.") VALUES  ".$vars;
+		try {
+			$query = $this->connection->prepare($string);
+			$query->execute($values);
+			return $this->connection->lastInsertId();
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
   	}
 	public function formatBulk($data){
 		$headers = $results = [];
@@ -124,9 +134,14 @@ class db {
 		}
 		$q.= " WHERE id=?";
 		$values[]=$id;
-		$query = $this->connection->prepare($q);
-		$query->execute($values);
-		return $query->rowCount();
+		
+		try {
+			$query = $this->connection->prepare($q);
+			$query->execute($values);
+			return $query->rowCount();
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
   	}
 
 	/**
@@ -144,9 +159,14 @@ class db {
 			$values = $build['values'];
 		}
 		$string = "SELECT COUNT(*) FROM ".$table.$string;
-		$query = $this->connection->prepare($string);
-		$query->execute($values);
-		return $query->fetchColumn();
+		
+		try {
+			$query = $this->connection->prepare($string);
+			$query->execute($values);
+			return $query->fetchColumn();
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
 	}
 
 	/**
@@ -158,9 +178,13 @@ class db {
 	public function delete($table,$id) {
 		$string = "DELETE FROM ".$table." WHERE id=?";
 		$values[] = $id;
-		$query = $this->connection->prepare($string);
-		$query->execute($values);
-		return $query->rowCount();
+		try {
+			$query = $this->connection->prepare($string);
+			$query->execute($values);
+			return $query->rowCount();
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
 	}
 	/**
 	* Search Row
@@ -179,25 +203,30 @@ class db {
 		$string = $build['query'];
 		$values = $build['values'];
 		$join = $this->buildJoin($query,$fields);
-
+		
 		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$join['string'].$string,$values) : null;
 		if(!$max) ['count'=>$query_count,'hits'=>[]];
 		$start = $page * $max;
 		$order = (isset($query['join']) && strpos($order, '.')==false) ? $table.'.'.$order : $order;
+		$group = (isset($query['group'])) ? " GROUP BY ".$query['group'] : "";
+		$string.=$group;
 		$string.=" ORDER BY ".$order." ".$sort;
 		$string.=" LIMIT ".$start.",".$max;
-
 		$string = "SELECT ".$join['fields']." FROM ".$table.$join['string'].$string;
-		//echo $string;
-		if($query){
-			$call = $this->connection->prepare($string);
-			$call->execute($values);
-			$results= $call->fetchAll(PDO::FETCH_ASSOC);
-		} else {
-			$call = $this->connection->query($string);
-			$results = $call->fetchAll(PDO::FETCH_ASSOC);
+	
+		try {
+			if($query){
+				$call = $this->connection->prepare($string);
+				$call->execute($values);
+				$results= $call->fetchAll(PDO::FETCH_ASSOC);
+			} else {
+				$call = $this->connection->query($string);
+				$results = $call->fetchAll(PDO::FETCH_ASSOC);
+			}
+			return ['count'=>$query_count,'hits'=>$results];
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
 		}
-		return ['count'=>$query_count,'hits'=>$results];
 	}
 
 	/**
@@ -211,10 +240,15 @@ class db {
 		$build = $this->buildWhere($query);
 		$join = $this->buildJoin($query,$select);
 		$string = "SELECT ".$join['fields']." FROM ".$table.$join['string'].$build['query'];
-		$call = $this->connection->prepare($string);
-		$call->execute($build['values']);
-		$results= $call->fetchAll(PDO::FETCH_ASSOC);
-		return ($results) ? $results[0] : $results;
+		
+		try {
+			$call = $this->connection->prepare($string);
+			$call->execute($build['values']);
+			$results= $call->fetchAll(PDO::FETCH_ASSOC);
+			return ($results) ? $results[0] : $results;
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
 	}
 
 	/**
@@ -237,9 +271,13 @@ class db {
 		}
 		$string.=$build['query'];
 		$values=$build['values'];
-		$query=$this->connection->prepare($string);
-		$query->execute($values);
-		return $query->rowCount();
+		try {
+			$query=$this->connection->prepare($string);
+			$query->execute($values);
+			return $query->rowCount();
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
   	}
 
 	/**
@@ -248,9 +286,12 @@ class db {
 	* @return mixed
 	*/
 	public function query($string){
-		$query = $this->connection->query($string);
-		$results = $query->fetchAll(PDO::FETCH_ASSOC);
-		return  $results;
+		try {
+			$query = $this->connection->query($string);
+			return $query->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
   	}
 
 	/**
@@ -260,9 +301,13 @@ class db {
 	* @return integer
 	*/
 	public function countString($string,$values){
-		$query = $this->connection->prepare($string);
-		$query->execute($values);
-		return $query->fetchColumn();
+		try {
+			$query = $this->connection->prepare($string);
+			$query->execute($values);
+			return $query->fetchColumn();
+		} catch (PDOException $e) {
+		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+		}
 	}
 	public function getType($p){
 		$v = [
@@ -293,11 +338,12 @@ class db {
 				$sql.='`'.$r.'` '.$this->getType($map['fields'][$r]);
 			}
 			$sql.=", PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; ";
-			//echo $sql.'<br />';
-			$this->connection->query($sql);
+			try {
+				return $this->connection->query($sql);
+			} catch (PDOException $e) {
+				return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+			}
 		}
-		
-		return $sql;
 	}
 	public function buildJoin($query,$fields){
 		if(!isset($query['join'])) {
@@ -315,7 +361,7 @@ class db {
 						$vals.=$f;
 					} else {
 						$vals.=$f.' AS ';
-						$alias = str_replace('.','_',$f);
+						$alias = strtolower(str_replace(['.','(',')'],['_','_',''],$f));
 						$vals.=$alias;
 					}
 				}
