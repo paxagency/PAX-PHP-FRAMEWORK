@@ -12,10 +12,11 @@ if(!isset($_URL[2])) {echo '{"error":"Please add a function to call in URL"}'; e
 $function = $_URL[2];
 array_splice($_URL,0,3);
 $_URL = array_values($_URL);
-if(!method_exists($path, $function)) {echo '{"error":"Class or method does not exist"}'; exit;}
 
 if($post) {
-	$call = $app->get($path)->$function($_URL,$_POST);
+	$class = $app->get($path);
+	if(!method_exists($class, $function)) {echo '{"error":"Class or method does not exist"}'; exit;}
+	$call = $class->$function($_URL,$_POST);
 	$referer  = ($_SERVER['HTTP_REFERER']=='') ? SITE_PUBLIC : $_SERVER['HTTP_REFERER'];
 	$url = (isset($call['url'])) ? $call['url'] : $referer;
     header('location:'.$url); 
