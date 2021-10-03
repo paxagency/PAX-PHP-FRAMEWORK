@@ -83,7 +83,8 @@ class db {
 			$vars.=")";
 		} else {
 			$bulk = $this->formatBulk($data);
-			$keys = implode($bulk['keys'],',');
+			
+			$keys = implode(',',$bulk['keys']);
 			foreach($bulk['data'] as $n=>$d) {
 				if($n) $vars.=",";
 				$vars .= '(';
@@ -309,10 +310,46 @@ class db {
 		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
 		}
 	}
-	public function getType($p){
+	/**
+	* Setup Database
+	* @param  array    $map
+	* @return sql 
+	* Example $map: 
+	*	[
+	*		"users"=>[
+	*			"id"=>["type"=>"key"],
+	*			"name"=>["type"=>"string"],
+	*			"age"=>["type"=>"int"]
+	*		]
+	*	]
+	*/
+	public function setup($map){
+		$query = $this->connection->query("DROP DATABASE ".DB_NAME.";");
+		$query = $this->connection->query("CREATE DATABASE ".DB_NAME.";");
+		$this->__construct();
+		$sql='';
+		foreach($map as $table=>$rows){
+			$sql="CREATE TABLE IF NOT EXISTS {$table} (";
+			$hasId = 0;
+			$n = 0;
+			foreach($rows as $field=>$type) {
+				if($n) $sql.=', ';
+				$sql.='`'.$field.'` '.$this->getType($type);
+				if($field=="id") $hasId=1;
+				$n++;
+			}
+			$primary = ($hasId) ? "PRIMARY KEY (`id`))" : "";
+			$sql.=", ".$primary." ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; ";
+			$return[] = $this->connection->query($sql);
+		}
+		return $return;
+	}
+	private function getType($p){
 		$v = [
 			'int'=>['type'=>' int(10) ','null'=>' NOT NULL ','default'=>''],
+			'number'=>['type'=>' float(10,2) ','null'=>' NOT NULL ','default'=>'0.00'],
 			'key'=>['type'=>' int(10) ','null'=>' unsigned NOT NULL AUTO_INCREMENT','default'=>''],
+			'bool'=>['type'=>' boolean ','null'=>' NOT NULL','default'=>''],
 			'tinyint'=>['type'=>' tinyint(4) ','null'=>' NOT NULL','default'=>'0'],
 			'string'=>['type'=>' varchar(191)','null'=>' COLLATE utf8mb4_unicode_ci NOT NULL ','default'=>''],
 			'date'=>['type'=>' timestamp ','null'=>' NULL ','default'=>'NULL'],
@@ -326,26 +363,50 @@ class db {
 		if($default!='') $default = ' DEFAULT '.$default;
 		return $str.=$default;
 	}
-	public function setup($map){
-		$query = $this->connection->query("DROP DATABASE ".DB_NAME.";");
-		$query = $this->connection->query("CREATE DATABASE ".DB_NAME.";");
-		$this->__construct();
-		$sql='';
-		foreach($map['tables'] as $table=>$rows){
-			$sql="CREATE TABLE IF NOT EXISTS {$table} (";
-			foreach($rows as $n=>$r) {
-				if($n) $sql.=', ';
-				$sql.='`'.$r.'` '.$this->getType($map['fields'][$r]);
-			}
-			$sql.=", PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; ";
-			try {
-				return $this->connection->query($sql);
-			} catch (PDOException $e) {
-				return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+	/**
+	* Setup Database
+	* @param  array    $data
+	* @param  array    $map (not required)
+	* @return sql 
+	* Example $data: 
+	*	[
+	*		"users"=>[
+	*			["name"=>"John Smith","age"=>22],
+	*			["name"=>"Sally Smith","age"=>23]
+	*		]
+	*	]
+	* Example $map: 
+	*	[
+	*		"users"=>[
+	*			"id"=>["type"=>"key"],
+	*			"name"=>["type"=>"string"],
+	*			"age"=>["type"=>"int"]
+	*		]
+	*	]
+	*/
+	public function seed($data,$map=[]) {
+		if(!$map) $map = $this->createMap($data);
+		$return[] = $this->setup($map);
+		foreach($data as $table=>$rows) {
+			$return[] = $this->save($table,$rows);
+		}
+		return $return;
+	}
+	private function createMap($data){
+		$tables = [];
+		foreach($data as $table=>$row) {
+			foreach($row[0] as $key=>$var){
+				$type = "string";
+				if(is_numeric($var)) $type = "number";
+				if(is_int($var)) $type = "int";
+				if(is_bool($var)) $type = "bool";
+				if($key=="id") $type = "key";
+				$tables[$table][$key] = ["type"=>$type];
 			}
 		}
+		return $tables;
 	}
-	public function buildJoin($query,$fields){
+	private function buildJoin($query,$fields){
 		if(!isset($query['join'])) {
 			$vals = (!$fields) ? '*' : implode(',',$fields);
 			return ['string'=>'','fields'=>$vals];

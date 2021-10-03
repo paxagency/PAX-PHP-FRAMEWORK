@@ -1,24 +1,20 @@
 {
 	"dbName":{
-		"fields":{
+		"users":{
 			"id":{"type":"key"},
-			"name":{"type":"string"},
 			"email":{"type":"string"},
 			"password":{"type":"string"},
 			"password_reset":{"type":"string"},
 			"first_name":{"type":"string"},
 			"last_name":{"type":"string"},
-			"title":{"type":"string"}, 
-			"name":{"type":"string"}, 
-			"active":{"type":"int","default":1},
-			"admin":{"type":"int","default":0},
-			"description":{"type":"string"},
-			"created":{"type":"datetime"},
-			"updated":{"type":"datetime"}
+			"password":{"type":"string"},
+			"password_reset":{"type":"string"}
 		},
-		"tables":{
-			"pages":["id","name","description"],
-			"users":["id","email","first_name","last_name","password","password_reset","active","created","updated","admin"]
+		"pages":{
+			"id":{"type":"key"},
+			"name":{"type":"string"},
+			"description":{"type":"string"},
+			"views":{"type":"int"}
 		}
 	}
 }

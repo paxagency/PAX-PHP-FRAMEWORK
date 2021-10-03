@@ -8,18 +8,28 @@
                 "last_name":"smith",
                 "password":"$2y$10$frXQ6bvRvYijQBHuHi4FtO7c.shndDIAO6K6GXOWgzQrBi6Jg5HrK",
                 "password_reset":"234KDJSDF3SDF"
+            },
+            {
+                "id":"2",
+                "email":"jack@website.com",
+                "first_name":"jack",
+                "last_name":"johnson",
+                "password":"$2y$10$frXQ6bvRvYijQBHuHi4FtO7c.shndDIAO6K6GXOWgzQrBi6Jg5HrK",
+                "password_reset":"994KDJSDF3SDF"
             }
         ],
         "pages":[
             {
                 "id":"1",
                 "name":"home",
-                "description":"Welcome to my website"
+                "description":"Welcome to my website",
+                "views":22
             },
             {
                 "id":"2",
                 "name":"about",
-                "description":"About us"
+                "description":"About us",
+                "views":44
             }
         ]
     }

@@ -3,23 +3,24 @@
 docs.paxagency.com/php/libraries/seed
 *****************************************/
 class seed {
+	public $app;
     public $data = '';
     public $map = '';
     public $dbName = "";
+    public $dbClass = "db";
     public function __construct() {
         $this->data = json_decode($this->removeComments(file_get_contents(DIR_DB.'database.json')),true);
         $this->map = json_decode($this->removeComments(file_get_contents(DIR_DB.'map.json')),true);
+        if(!$this->map) $this->map = [];
         $this->dbName = DB_NAME;
     }
     public function removeComments($input){
         return preg_replace('#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#','$1',$input);
     }
     public function seed($get=[],$post=[]) {
-        if(!isset($this->db)) return ['error'=>'Database not injected'];
-        foreach($this->map['tables'] as $t=>$o) {
-            if(isset($this->data[$this->dbName][$t])) $this->db->save($t,$this->data[$this->dbName][$t]);
-        }
-        return ['success'=>1];
+        if(!$this->app->get($this->dbClass)) return ['error'=>'Database not injected'];
+        return $this->map[$this->dbName];
+        return $this->app->get($this->dbClass)->seed($this->data[$this->dbName], $this->map[$this->dbName]);
     }
     public function update($get=[],$post=[]) {
         return ['Success'=>0,'Message'=>'Item is not updated. This requires a database.'];
@@ -31,16 +32,8 @@ class seed {
         return ['Success'=>0,'Message'=>'Item is not deleted. This requires a database.'];
     }
     public function setup($get=[],$post=[]) {
-        if(!isset($this->db)) return ['error'=>'Database not injected'];
-        $this->db->setup($this->map);
-        return ['success'=>1];
-    }
-    public function generate($get=[],$post=[]) {
-        if(!isset($this->db)) return ['error'=>'Database not injected'];
-        $this->db->setup($this->map);
-        foreach($this->map['tables'] as $t=>$o) {
-            if(isset($this->data[$this->dbName][$t])) $this->db->save($t,$this->data[$this->dbName][$t]);
-        }
+        if(!$this->app->get($this->dbClass)) return ['error'=>'Database not injected'];
+        return $this->app->get($this->dbClass)->setup($this->map[$this->dbName]);
         return ['success'=>1];
     }
     public function get($type,$id,$key='id'){

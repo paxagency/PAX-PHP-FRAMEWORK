@@ -16,8 +16,9 @@ define('DIR_TEMP',getcwd().'/front/html/templates/');
 // FILES
 define('FILE_APP',getcwd().'/back/sys/app.php');
 // DATABASE
-define('DB_SERVER', "http://localhost:9200");
+define('DB_SERVER', "localhost");
 define('DB_PORT', "9200");
 define('DB_NAME', 'dbName');
-
+define('DB_USER', 'root');
+define('DB_PASS', 'root');
 ?>
