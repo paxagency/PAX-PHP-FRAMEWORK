@@ -205,7 +205,7 @@ class db {
 		$values = $build['values'];
 		$join = $this->buildJoin($query,$fields);
 		
-		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$join['string'].$string,$values) : null;
+		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$string,$values) : null;
 		if(!$max) ['count'=>$query_count,'hits'=>[]];
 		$start = $page * $max;
 		$order = (isset($query['join']) && strpos($order, '.')==false) ? $table.'.'.$order : $order;
