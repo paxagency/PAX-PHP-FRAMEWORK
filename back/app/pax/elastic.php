@@ -34,7 +34,7 @@ class elastic {
         
         if(!isset($h['_source'])) return ['error'=>'not found'];
         $h['_source']['id'] = $h['_id']; 
-        $h['_source']['_seq_no']= $h['_seq_no'];
+        if(isset($h['_seq_no'])) $h['_source']['_seq_no']= $h['_seq_no'];
         foreach($h['_source'] as $k=>$o) if($o=='0' || $o=='1') $h['_source'][$k] = (float)$o;
         return $h['_source'];
     }

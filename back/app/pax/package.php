@@ -61,12 +61,12 @@ class package {
     }
     public function templates() {
 		$this->_folder = [];
-		$this->_setFolder(DIR_PAGE,[]);
-      
+		$this->_setFolderTemp(DIR_PAGE);
+     
 		foreach($this->_folder as $name=>$folder){
             $url = explode('pages/',$folder);
             $urlDash = str_replace(['.html','/'],['','-'],$url[1]);
-            echo "<template pax='{$urlDash}'>";
+            echo "<template pax='{$name}'>";
             require_once($folder);
             echo "</template>";
         }
@@ -94,6 +94,23 @@ class package {
 			}
 	  	}
 	  	foreach($folders as $f) if(!in_array($f,$ignore)) $this->_setFolder($f.'/',$ignore);
+	}
+	private function _setFolderTemp($dir,$sub=false) {
+		$folders = [];
+	  	foreach(scandir($dir) as $file) {
+			if($file[0]==".") continue;
+			if(is_dir($dir.$file)) {
+				$folders[] = $dir.$file;
+				$subst= ($sub) ? $sub.$file.'-' : $file.'-';
+			} else {
+				$name = str_replace('.html','',$file);
+				if($sub) {
+					$name = ($file=='index.html') ?   substr($sub, 0, -1) : str_replace('.html','',$sub.$file);
+				}
+				$this->_folder[$name] = $dir.$file;
+			}
+	  	}
+	  	foreach($folders as $f) $this->_setFolderTemp($f.'/',$subst);
 	}
 	protected function stripComments($content) {
         $id = "jsdf.823.dff3sf.356";
