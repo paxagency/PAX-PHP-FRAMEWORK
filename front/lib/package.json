@@ -1,0 +1,20 @@
+{
+    "name": "project",
+    "version": "0.0.1",
+    "author": "John Smith <john@smith.org>",
+    "main":"/public/app.js",
+    "style":"/public/app.css",
+    "dependencies":{
+        "jquery":"^3.4.0",
+        "pax-js-framework":"0.0.138",
+        "pax-css":"1.0.2"
+        //"jquery-ui":"1.12.1",
+        //"anticon":"0.0.1",
+        //"select2":"4.0.13"
+        //"flatpickr":"4.6.3",
+        //"moment":"2.27.0"
+    },
+    "css":["/src/css/*"],
+    "js":["/src/js/*"]
+}
+
