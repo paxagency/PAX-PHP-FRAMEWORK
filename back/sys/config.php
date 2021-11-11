@@ -5,6 +5,7 @@ define('SITE_ERRORS', 1);
 define('SITE_SSL', 0);
 define('SITE_WWW', 0);
 define('SITE_URL_INDEX',1);
+define('SITE_BUILD',1);
 // DIRECTORIES
 define('DIR_BACK',getcwd().'/back/');
 define('DIR_APP',getcwd().'/back/app/');
