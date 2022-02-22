@@ -210,6 +210,7 @@ class db {
 		$start = $page * $max;
 		$order = (isset($query['join']) && strpos($order, '.')==false) ? $table.'.'.$order : $order;
 		$group = (isset($query['group'])) ? " GROUP BY ".$query['group'] : "";
+		$having = (isset($query['having'])) ? " HAVING ".implode(" ",$query['having']) : "";
 		$string.=$group;
 		$string.=" ORDER BY ".$order." ".$sort;
 		$string.=" LIMIT ".$start.",".$max;
@@ -440,8 +441,13 @@ class db {
 		if(!isset($data['and']) && !isset($data['or'])) return ['query'=>'','values'=>[]];
         $this->values = [];
 		if(isset($data['and'])) $str=$this->_if($data['and'],'AND');
-        if(isset($data['or'])) $str=$this->_if($data['or'],'OR');
-		$str = ' WHERE '.$str.' ';
+        if(isset($data['or']) && !isset($data['and'])) $str=$this->_if($data['or'],'OR');
+		if(isset($data['or']) && isset($data['and'])) {
+			$or = $this->_if($data['or'],'OR');
+			$str = ' WHERE ('.$str.') AND ('.$or.')';
+		} else {
+			$str = ' WHERE '.$str.' ';
+		}
         return ['query'=>$str,'values'=>$this->values];
     }
 	public function _if($array,$type='AND'){
