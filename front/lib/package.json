@@ -5,14 +5,10 @@
     "main":"/public/app.js",
     "style":"/public/app.css",
     "dependencies":{
-        "jquery":"^3.4.0",
-        "pax-js-framework":"0.0.138",
-        "pax-css":"1.0.2"
-        //"jquery-ui":"1.12.1",
-        //"anticon":"0.0.1",
-        //"select2":"4.0.13"
-        //"flatpickr":"4.6.3",
-        //"moment":"2.27.0"
+        //"jquery":"^3.4.0",
+        //"pax-js-framework":"0.0.138",
+        //"pax-css":"1.0.2",
+        //"jquery-ui":"1.12.1"
     },
     "css":["/src/css/*"],
     "js":["/src/js/*"]
