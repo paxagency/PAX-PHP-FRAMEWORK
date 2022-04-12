@@ -172,21 +172,36 @@ class db {
 
 	/**
 	* Remove Row
-	* @param  string   $table
-	* @param  integer    $id
+	* @param  string   		 		$table
+	* @param  array|integer|string  $data
+	* @param  string    	 		$field
 	* @return integer
 	*/
-	public function delete($table,$id) {
-		$string = "DELETE FROM ".$table." WHERE id=?";
-		$values[] = $id;
+	public function delete($table,$data=false,$key="id") {
+		if(!$data) return ["error"=>"missing data"];
+		$string = "DELETE FROM ".$table;
+		$values = [];
+		if(is_array($data)){
+			$second = false;
+			foreach($data as $key=>$var) {
+				$string.= ($second) ? " AND ".$key."=?" : " WHERE ".$key."=?";
+				$values[]=$var;
+				$second = true;
+			}
+		} else {
+			$string.= " WHERE ".$key."=?";
+			$values[]=$data;
+		}
+		
 		try {
 			$query = $this->connection->prepare($string);
 			$query->execute($values);
 			return $query->rowCount();
 		} catch (PDOException $e) {
-		    return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
+			return $this->displayErrors ? ["error"=>$e->getMessage()] : [];
 		}
 	}
+	
 	/**
 	* Search Row
 	* @param  string   $table
@@ -205,7 +220,8 @@ class db {
 		$values = $build['values'];
 		$join = $this->buildJoin($query,$fields);
 		
-		$query_count = ($count) ? $this->countString("SELECT Count(1) FROM ".$table.$string,$values) : null;
+		$table_count_field = (strlen($join["string"])>0) ? $table.".id" : "id";
+		$query_count = ($count) ? $this->countString("SELECT Count(DISTINCT ".$table_count_field.") FROM ".$table.$join["string"].$sql,$values) : null;
 		if(!$max) ['count'=>$query_count,'hits'=>[]];
 		$start = $page * $max;
 		$order = (isset($query['join']) && strpos($order, '.')==false) ? $table.'.'.$order : $order;
