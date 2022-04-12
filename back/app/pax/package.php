@@ -61,17 +61,20 @@ class package {
     }
     public function templates() {
 		$this->_folder = [];
-		$this->_setFolderTemp(DIR_PAGE);
-     
+		$this->_setFold(DIR_PAGE);
+		
 		foreach($this->_folder as $name=>$folder){
             $url = explode('pages/',$folder);
             $urlDash = str_replace(['.html','/'],['','-'],$url[1]);
+           // echo "<script>alert('{$name}');</script>";
+            if($name=='test') continue;
             echo "<template pax='{$name}'>";
             require_once($folder);
             echo "</template>";
         }
     }
 	function formatJs($js){
+		return $js;
 		return $this->app->get("minifier")::minify($js);
     }
     function formatCss($css){
@@ -81,6 +84,22 @@ class package {
 	}
 	public function download($url) {
         return file_get_contents($url);
+    }
+    private function _setFold($dir,$files='') {
+   	 	$folders = [];
+	  	foreach(scandir($dir) as $file) {
+			if($file[0]==".") continue;
+			if(is_dir($dir.$file)) {
+				$this->_setFold($dir.$file.'/',$files.$file.'_');
+			} else {	
+				$name = $files.str_replace('.html','',$file);
+				if($files!='') {
+					$name = ($file=='index.html') ?   substr($files, 0, -1) : str_replace('.html','',$files.$file);
+				}
+				
+				$this->_folder[$name] = $dir.$file;
+			}
+	  	}
     }
 	private function _setFolder($dir,$ignore=[]) {
 		$folders = [];
