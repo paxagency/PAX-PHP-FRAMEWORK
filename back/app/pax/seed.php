@@ -15,7 +15,9 @@ class seed {
         $this->dbName = DB_NAME;
     }
     public function removeComments($input){
-        return preg_replace('#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#','$1',$input);
+    	$input =  preg_replace('#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#','$1',$input);
+        //REMOVE TRAILING COMMAS
+        return preg_replace('/\,(?!\s*?[\{\[\"\'\w])/','$1',$input);
     }
     public function seed($get=[],$post=[]) {
         if(!$this->app->get($this->dbClass)) return ['error'=>'Database not injected'];
