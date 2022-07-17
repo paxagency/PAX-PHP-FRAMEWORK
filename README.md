@@ -8,8 +8,8 @@
     <li><a href='http://docs.paxagency.com/php/intro/structure'>Simplistic File Structure</a></li>
     <li><a href='http://docs.paxagency.com/php/routing'>Automated Routing</a></li>
     <li><a href='http://docs.paxagency.com/php/application/#class'>Automated Namespacing</a></li>
-    <li><a href='http://docs.paxagency.com/php/application/'>Effortless Application Design</a></li>
-    <li><a href='http://docs.paxagency.com/php/libraries/seed'>Local Database Seeding</a></li>
+    <li><a href='http://docs.paxagency.com/php/application/'>Effortless Class Injections</a></li>
+    <li><a href='http://docs.paxagency.com/php/libraries/seed'>JSON Database Seeding</a></li>
     <li><a href='http://docs.paxagency.com/php/libraries/db'>Intuitive Database ORM</a></li>
     <li><a href='http://docs.paxagency.com/php/libraries/tests'>Congruent Unit Testing</a></li>
 </ul>
