@@ -6,8 +6,8 @@ define('SITE_ERRORS', 1);
 define('SITE_SSL', 0);
 define('SITE_WWW', 0);
 //PACKAGE
-define('SITE_BUILD',0);
-define('SITE_TEMP',0);
+define('SITE_BUILD',0);  //BUILD CSS & JS
+define('SITE_TEMP',0);   //WRAP VIEWS IN TEMPLATE TAGS FOR JS FRAMEWORK
 // DIRECTORIES
 define('DIR_BACK',getcwd().'/back/');
 define('DIR_APP',getcwd().'/back/app/');

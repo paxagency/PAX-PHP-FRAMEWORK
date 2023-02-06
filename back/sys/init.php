@@ -3,7 +3,7 @@
 docs.paxagency.com/php
 *********************/
 require_once('back/sys/config.php');
-if(SITE_ERRORS) ini_set('display_errors', 1);
+(SITE_ERRORS) ? ini_set('display_errors', 1) : ini_set('display_errors', 0);
 if(SITE_SSL) {
     if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTP_X_FORWARDED_PROTO']!='https') header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 }
