@@ -9,12 +9,13 @@ class crud {
     public function save($get=[],$post=[]) {
         $auth = $this->auth($get,$post,'save');
         if(!$auth) return ['error'=>1,'message'=>'You must be logged in'];
-        $save = $this->app->get(DB_CLASS)->save($auth['get'][0],$auth['post']);
+        $save = $this->app->get(DB_CLASS)->save($get[0],$auth['post']);
         return $save;
     }
     public function update($get=[],$post=[]) {
+    	$auth = $this->auth($get,$post,'save');
         if(!$this->auth($get,$post,'update')) return ['error'=>1,'message'=>'You must be logged in'];
-        $update = $this->app->get(DB_CLASS)->update($get[0],$get[1],$post);
+        $update = $this->app->get(DB_CLASS)->update($get[0],$get[1],$auth['post']);
         return $update;
     }
     public function delete($get=[],$post=[]) {
@@ -46,7 +47,16 @@ class crud {
         if(!isset($get[0])) return 0;
         $req = ["get","update","delete"];
         if(in_array($method,$req) && !isset($get[1])) return 0;
+        if($method=="save" || $method=="update") $post = $this->sanitize($post);
         return ['get'=>$get,'post'=>$post];
+    }
+    public function sanitize($data) {
+        if (is_string($data)) return filter_var($data, FILTER_UNSAFE_RAW);
+		foreach ($data as $k => $v) {
+			if (is_string($v)) $data[$k] = filter_var($v, FILTER_UNSAFE_RAW);
+			if (is_array($v)) $data[$k] = $this->sanitize($v);
+		}
+		return $data;
     }
 }
 ?>
