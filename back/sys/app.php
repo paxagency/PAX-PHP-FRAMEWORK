@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class app {
     public $_folder = [];
     private $_passApp = true;

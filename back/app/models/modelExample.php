@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class modelExample {
 	public $inject = ["utilExample"];
     public function __construct() {}
