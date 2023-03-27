@@ -6,10 +6,15 @@ class auth {
     public $testMode = 0;
     public $app;
     public function login($get=[],$post=[]) { 
+    	//ATTEMPTS
+    	if(!isset($this->app->get("session")->data['attempts'])) $this->app->get("session")->data['attempts']=0;
+    	$this->app->get("session")->data['attempts']++;
+    	if($this->app->get("session")->data['attempts']>8) return ['success'=>0,'url'=>SITE_PUBLIC.'error/attempts'];
+    	//AUTH
     	if($this->authorize($post)) {
             return ['success'=>1,'url'=>SITE_PRIVATE];
         } else {
-            return ['success'=>0,'url'=>SITE_PUBLIC.'/error'];
+            return ['success'=>0,'url'=>SITE_PUBLIC.'error'];
         }
     }
     private function authorize($post) {

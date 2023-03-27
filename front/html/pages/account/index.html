@@ -10,7 +10,8 @@
 <body>
 <h3 class='center'>Log in</h3>
 <ul><li>john@website.com</li><li>password</li></ul>
-<p class='hide error center' id='error' style='color:brown;display:none;'>There was an error. Please try again.</p>
+<p  id='error' style='color:brown;display:none;'>There was an error. Please try again.</p>
+<p id='attempts' style='color:brown;display:none;'>There were too many attempts. Please check back later.</p>
 <div class='form' >
 	<form id="form"  method="post" action="/api/auth/login?post=1" enctype="multipart/form-data">
 		<input type="text" autocomplete="username" name="email" id="form-email" placeholder="Email" class='input'/>
@@ -24,7 +25,8 @@
 
 <script>
 var path = window.location.pathname.split('/');
-if(path[2]=='error') document.getElementById("error").style.display = "block";
+if(path[2]=='error' && path[3]!='attempts') document.getElementById("error").style.display = "block";
+if(path[3]=='attempts') document.getElementById("attempts").style.display = "block";
 </script>
 </body>
 </html>
