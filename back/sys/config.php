@@ -1,10 +1,15 @@
 <?php
+$_SSL = (isset($_SERVER['HTTPS'])) ? 1 : 0;
+$_PROTOCOL =  ($_SSL) ? "https://" : "http://";
+
 // SITE
-define('SITE_PUBLIC', $_SERVER['HTTP_HOST'].'/');
-define('SITE_URL_INDEX',1);
+define('SITE_PUBLIC', $_PROTOCOL.$_SERVER['HTTP_HOST'].'/account');
+define('SITE_PRIVATE', $_PROTOCOL.$_SERVER['HTTP_HOST'].'/');
 define('SITE_ERRORS', 1);
-define('SITE_SSL', 0);
+define('SITE_SSL', $_SSL);
+define('SITE_PROD', $_SSL);
 define('SITE_WWW', 0);
+define('SITE_URL_INDEX',1);
 //PACKAGE
 define('SITE_BUILD',0);  //BUILD CSS & JS
 define('SITE_TEMP',0);   //WRAP VIEWS IN TEMPLATE TAGS FOR JS FRAMEWORK
@@ -18,6 +23,7 @@ define('DIR_PAGE',getcwd().'/front/html/pages/');
 define('DIR_TEMP',getcwd().'/front/html/templates/');
 // FILES
 define('FILE_APP',getcwd().'/back/sys/app.php');
+
 // DATABASE
 define('DB_CLASS', "seed");
 define('DB_SERVER', "localhost");
@@ -35,4 +41,7 @@ define('EM_KEY', '{ACCESSKEY}');
 define('EM_CLASS','postmark');
 define('EM_FROM','info@website.com');
 define('EM_SITE',$_SERVER['HTTP_HOST']);
+//AUTH
+define('CAPTCHA_SECRET',0);
+
 ?>
