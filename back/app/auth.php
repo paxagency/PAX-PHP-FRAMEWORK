@@ -12,6 +12,7 @@ class auth {
     	if($this->app->get("session")->data['attempts']>8) return ['success'=>0,'url'=>SITE_PUBLIC.'error/attempts'];
     	//AUTH
     	if($this->authorize($post)) {
+    		$this->app->get("session")->data['attempts']=0;
             return ['success'=>1,'url'=>SITE_PRIVATE];
         } else {
             return ['success'=>0,'url'=>SITE_PUBLIC.'error'];
