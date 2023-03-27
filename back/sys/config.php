@@ -3,7 +3,7 @@ $_SSL = (isset($_SERVER['HTTPS'])) ? 1 : 0;
 $_PROTOCOL =  ($_SSL) ? "https://" : "http://";
 
 // SITE
-define('SITE_PUBLIC', $_PROTOCOL.$_SERVER['HTTP_HOST'].'/account');
+define('SITE_PUBLIC', $_PROTOCOL.$_SERVER['HTTP_HOST'].'/account/');
 define('SITE_PRIVATE', $_PROTOCOL.$_SERVER['HTTP_HOST'].'/');
 define('SITE_ERRORS', 1);
 define('SITE_SSL', $_SSL);

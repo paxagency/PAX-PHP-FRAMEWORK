@@ -4,11 +4,12 @@ class auth {
     public $tokenLength = 10;
     public $tokenTime = 9200; //20 minutes
     public $testMode = 0;
+    public $app;
     public function login($get=[],$post=[]) { 
     	if($this->authorize($post)) {
             return ['success'=>1,'url'=>SITE_PRIVATE];
         } else {
-            return ['success'=>0,'url'=>SITE_ACCOUNT.'/error'];
+            return ['success'=>0,'url'=>SITE_PUBLIC.'/error'];
         }
     }
     private function authorize($post) {
@@ -18,6 +19,7 @@ class auth {
                 'first_name'=>"John",
                 'last_name'=>"Doe",
                 'text'=>"John Doe",
+                'email'=>"john_doe@website.com",
                 'admin'=>1
 			]);
     	}
@@ -35,7 +37,7 @@ class auth {
         if(!$post) return ['success'=>0,'url'=>SITE_PUBLIC.'thankyou/error'];
       
         $user = $this->getUser('email',$post['email']);
-        if(!isset($user['error'])) return ['success'=>0,'message'=>'This user already exists.','url'=>SITE_PUBLIC.'thankyou/error'];
+        if(!$user['success']) return ['success'=>0,'message'=>'This user already exists.','url'=>SITE_PUBLIC.'thankyou/error'];
         
         $save = $this->saveUser($post);
         $url = SITE_PUBLIC."api/auth/verify/".$post['token'].'?post=1';
@@ -43,12 +45,12 @@ class auth {
         return ['success'=>1,'url'=>SITE_PUBLIC.'thankyou/new'];
     }
     public function logout($get=[],$post=[]) {
-        $this->session->destroy();
+        $this->app->get("session")->destroy();
         return ['success'=>1,'url'=>SITE_PUBLIC];
     }
     public function reset($get=[],$post=[]) {
         $user = $this->getUser('email',$post['email']);
-        if(isset($user['error']))  return ['success'=>0,'url'=>SITE_PUBLIC."thankyou/reset"];
+        if(!$user['success'])  return ['success'=>0,'url'=>SITE_PUBLIC."thankyou/reset"];
         $send = $this->sendReset($post['email'],$user['token']);
         return ['success'=>1,'url'=>SITE_PUBLIC."thankyou/reset"];
     }
@@ -78,9 +80,9 @@ class auth {
         $post['last_name']=$o['last_name'];
         $post['token']=$post['user_token']=$this->genToken();
         $post['active'] = 0;
-        if(isset($this->session->data['cookie']["refer"])) {
-        	$user = $this->getUser('user_token',$this->session->data['cookie']["refer"]);
-        	if($user) $post['affiliate']=["text"=>$user["first_name"].' '.$user["last_name"],"id"=>$user["id"],"refer"=>$this->session->data['cookie']["refer"]];
+        if(isset($this->app->get("session")->data['cookie']["refer"])) {
+        	$user = $this->getUser('user_token',$this->app->get("session")->data['cookie']["refer"]);
+        	if($user) $post['affiliate']=["text"=>$user["first_name"].' '.$user["last_name"],"id"=>$user["id"],"refer"=>$this->app->get("session")->data['cookie']["refer"]];
         }
         return $post;
     }
@@ -102,10 +104,10 @@ class auth {
     private function saveToken($user){
     	if(!isset($user['user_token'])) {
     		 $user['user_token'] = $this->genToken();
-    		 $this->crud->update(['user',$user['id']],["user_token"=>$user['user_token']]);
+    		 $this->app->get("crud")->update(['user',$user['id']],["user_token"=>$user['user_token']]);
     	}
     	
-        return $this->session->data['token'] = $this->token->encode([
+        return $this->app->get("session")->data['token'] = $this->app->get("token")->encode([
             'exp'=>time()+$this->tokenTime,
             'user'=>[
                 'id'=>$user['id'],
@@ -118,13 +120,13 @@ class auth {
         ]);
     }
     public function verifyToken($user){
-    	$token = (isset($this->session->data['token'])) ? $this->session->data['token'] : "";
-        $token = $this->token->decode($token);
+    	$token = (isset($this->app->get("session")->data['token'])) ? $this->app->get("session")->data['token'] : "";
+        $token = $this->app->get("token")->decode($token);
         return (!$token['success'] || time()>$token['exp']) ? 0 : 1;
     }
     public function getToken(){
-    	$token = (isset($this->session->data['token'])) ? $this->session->data['token'] : "";
-        $token = $this->token->decode($token);
+    	$token = (isset($this->app->get("session")->data['token'])) ? $this->app->get("session")->data['token'] : "";
+        $token = $this->app->get("token")->decode($token);
   		return (isset($token["user"])) ? $token["user"] : 0;
     }
     //EMAILS
@@ -152,11 +154,11 @@ class auth {
     //DATABASE FUNCTIONS
     private function getUser($key,$var){
         $var = strtolower(trim($var));
-        $user = $this->crud->get(['user',$var,$key]);
+        $user = $this->app->get("crud")->get(['user',$var,$key]);
         return ($user) ? $user: 0;
     }
     private function saveUser($post,$user=0){
-        return (!$user) ?  $this->crud->save(['user'],$post) :  $this->crud->update(['user',$user['id']],$post);
+        return (!$user) ?  $this->app->get("crud")->save(['user'],$post) :  $this->app->get("crud")->update(['user',$user['id']],$post);
     }
     
 }

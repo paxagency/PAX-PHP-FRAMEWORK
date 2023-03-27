@@ -1,3 +1,4 @@
+
 <h1 style='text-align:center;font-family:"Helvetica Neue","Helvetica",arial; font-weight:200;'>
     <span style='font-size:2em;font-weight:900;'>PAX</span><br />PHP Framework<br />
     <button onclick='window.location.href = "http://docs.paxagency.com/php";'>View Docs</button> 
@@ -5,7 +6,12 @@
     <button onclick='window.location.href = "api/crud/seed?pretty=1";'>Seed Database</button>
     <button onclick='window.location.href = "/test/run";'>Run Tests</button>
 </h1>
-
+<p style="text-align:center;">
+	<textarea style="width:300px; height:200px; margin:0 auto;">
+	<?php print_r($_CONFIG); ?>
+	</textarea><br><br>
+	<a href="/api/auth/logout?post=1">Logout</a>
+</p>
 <h2 style='text-align:center;font-family:"Helvetica Neue","Helvetica",arial; font-weight:200;'>
     <span style='font-weight:900;'>DB</span>  Class<br />
     <button onclick='window.location.href = "api/crud/search/pages?pretty=1";'>Search Database</button>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="/public/app.css">
+    <link type="text/css" rel="stylesheet" href="/public/account.css">
+    <title>Admin</title>
+</head>
+
+<body>
+<h3 class='center title'>Thank you</h3>
+<p id='message'></p>
+<br />
+<a class='button block bl' href='/'>Login</a>
+		
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+var _thankyou = {
+	message:{
+		default:"Please login below",
+		reset:"An email has been sent with instructions on how to change your password.",
+		set:"Your password has been updated. You can log in below.",
+		error:"There has been an error. Please try your login again or <a href='mailto:info@paxagency.com'>contact our tech team.</a>",
+	},
+	init:function(){
+		var path = window.location.pathname.split('/');
+		var url = path[3];
+		var message = (_thankyou.message[url]) ? _thankyou.message[url] : _thankyou.message["default"];
+		document.getElementById("message").innerHTML = message;
+	}
+}
+_thankyou.init();
+</script>
+</body>
+</html>
+

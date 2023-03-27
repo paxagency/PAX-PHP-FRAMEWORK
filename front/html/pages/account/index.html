@@ -1,0 +1,30 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="/public/app.css">
+    <link type="text/css" rel="stylesheet" href="/public/account.css">
+    <title>Admin</title>
+</head>
+<body>
+<h3 class='center'>Log in</h3>
+<ul><li>john@website.com</li><li>password</li></ul>
+<p class='hide error center' id='error' style='color:brown;display:none;'>There was an error. Please try again.</p>
+<div class='form' >
+	<form id="form"  method="post" action="/api/auth/login?post=1" enctype="multipart/form-data">
+		<input type="text" autocomplete="username" name="email" id="form-email" placeholder="Email" class='input'/>
+		<input type="password" autocomplete="current-password" name="password" id="form-password" placeholder="Password" class='input'/>
+		<input type='submit' class='button block' value='Log In' style='border:none;'>
+	</form>
+</div>
+<p class="center sm">
+	<a href="/account/reset"> Reset Password</a>
+</p>
+
+<script>
+var path = window.location.pathname.split('/');
+if(path[2]=='error') document.getElementById("error").style.display = "block";
+</script>
+</body>
+</html>

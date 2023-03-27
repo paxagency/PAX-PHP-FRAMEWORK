@@ -1,0 +1,47 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="/public/app.css">
+     <link type="text/css" rel="stylesheet" href="/public/account.css">
+    <title>Admin</title>
+</head>
+
+<body>
+
+<h3 class='center'> Password Reset</h3>
+<form id='form' onsubmit="return submission()"  method="post" action="/api/auth/reset?post=1" enctype="multipart/form-data" >
+	<input type='text' name='email' id='form-email' placeholder='Email' class='input reset' />
+	<input class='button  block bl' type='submit' />
+</form>
+
+
+<p class='center sm'>
+	<a href='/account/'> Sign In</a>
+</p>
+
+
+<script>
+    var reg_email = /\S+@\S+\.\S+/;
+    function submission(){
+        var email = document.getElementById('form-email').value;
+        var body = '';
+        if(!email.match(reg_email)) body = 'Please enter a valid email.'; 
+        if(body!='') {
+            alert(body)
+            return false;   
+        }
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,47 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="/public/app.css">
+    <title>Admin</title>
+</head>
+
+<body>
+<h3>Set Password</h3>
+<p id="error" style='color:brown;display:none;'>There was an error.</p>
+
+<form id='form'  method="post" action="/api/auth/set?post=1" enctype="multipart/form-data" >
+	<input type='password' name='password' id='form-password' placeholder='New Password' class='input'/>
+	<input type='hidden' name='token' id='form-key' value='<?=$_URL[2]?>'/>
+	<a class='button bl block' onclick='_login.submission();'>Submit</a>
+</form>
+<p class="center sm"><a href="/account/reset"> Reset Password</a></p>
+<script>
+   var  _login = {
+        reg_pass:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!\(\)@#\$%\^&\*])(?=.{7,})/,
+        submission:function(){
+            var pass = document.getElementById("form-password").value;
+            var key = document.getElementById("form-key").value;
+            var body = '';
+            if(key=='') body = 'There was an error';
+            if(body=='' && !pass.match(this.reg_pass)) body = 'Password requires an uppercase and lowercase letter, number, special character, and must be 8 characters in length.'; 
+            if(body!='') {
+            	document.getElementById("error").innerHTML = body;
+                document.getElementById("error").style.display = "block";
+            } else {
+               document.getElementById("form").submit();
+            }
+        }
+    }
+  
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
