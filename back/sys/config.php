@@ -38,7 +38,7 @@ define('S3_BUCKET','bucket');
 define('S3_URL','https://{key}.s3.amazonaws.com');
 //EMAIL
 define('EM_KEY', '{ACCESSKEY}');
-define('EM_CLASS','postmark');
+define('EM_CLASS',0);
 define('EM_FROM','info@website.com');
 define('EM_SITE',$_SERVER['HTTP_HOST']);
 //AUTH

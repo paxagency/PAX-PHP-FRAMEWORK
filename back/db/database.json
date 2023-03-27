@@ -9,17 +9,17 @@
                 "admin":1,
                 "active":1,
                 "password":"$2y$10$frXQ6bvRvYijQBHuHi4FtO7c.shndDIAO6K6GXOWgzQrBi6Jg5HrK",
-                "password_reset":"234KDJSDF3SDF"
+                "token":"234KDJSDF3SDF"
             },
             {
                 "id":"2",
-                "email":"jack@website.com",
+                "email":"kiteck@gmail.com",
                 "first_name":"jack",
                 "last_name":"johnson",
                 "admin":1,
                 "active":1,
                 "password":"$2y$10$frXQ6bvRvYijQBHuHi4FtO7c.shndDIAO6K6GXOWgzQrBi6Jg5HrK",
-                "password_reset":"994KDJSDF3SDF"
+                "token":"994KDJSDF3SDF"
             }
         ]
     }

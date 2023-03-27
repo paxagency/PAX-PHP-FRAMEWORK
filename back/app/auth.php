@@ -55,8 +55,10 @@ class auth {
     }
     public function reset($get=[],$post=[]) {
         $user = $this->getUser('email',$post['email']);
-        if(!$user['success'])  return ['success'=>0,'url'=>SITE_PUBLIC."thankyou/reset"];
+        
+        if(!isset($user['id']))  return ['success'=>0,'url'=>SITE_PUBLIC."thankyou/reset"];
         $send = $this->sendReset($post['email'],$user['token']);
+        
         return ['success'=>1,'url'=>SITE_PUBLIC."thankyou/reset"];
     }
     public function set($get=[],$post=[]) {
@@ -136,7 +138,7 @@ class auth {
     }
     //EMAILS
     private function sendVerify($email,$url){
-        return $this->mailer->send([
+        return $this->app->get("mailer")->send([
             'to'=>$email,
             'subject'=>'Account Created!',
             'body'=>"<img src='https://clearityhealth.com/public/img/fam2.jpg' style='max-width:400px;'/><h1>Welcome to Clearity</h1><p>Your account has been created. <br />please <a href='".$url."'>Click Here</a> to login to your brand new account! </p>"
@@ -145,7 +147,7 @@ class auth {
     private function sendReset($email,$email_key){
         $url = SITE_PUBLIC."account/set/".$email_key;
         $msg = "<h1>Password Reset</h1><p>To reset your password please click the link below</p><p><a href='".$url."'>".$url."</a></p>";
-        return $this->mailer->send(['to'=>$email,'subject'=>"Password Reset",'body'=>$msg]);
+        return $this->app->get("mailer")->send(['to'=>$email,'subject'=>"Password Reset",'body'=>$msg]);
     }
     private function genToken(){
         return bin2hex(random_bytes($this->tokenLength));

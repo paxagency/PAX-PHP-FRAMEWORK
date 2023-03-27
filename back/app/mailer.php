@@ -1,22 +1,25 @@
 <?php
 class mailer {
 	public $app;
-    public $required = ["from","body"]; 
+    public $required = ["to","body"]; 
     public $from = "info@website.com";
     public $bg = "#888888";
     public $company = "My Company";
     public $company_image = "";
     public $website = "https://website.com";
     public $phone = "555.555.5555";
+    public $active = 0;
     public function __construct() {
-     	if(isset(EM_FROM)) $this->from = EM_FROM;
+     	if(defined(EM_FROM)) $this->from = EM_FROM;
+     	if(defined(EM_CLASS)) $this->active = EM_CLASS;
     }
     public function send($post){
     	foreach($this->required as $r) if(!isset($post[$r])) return ["success"=>0,"message"=>"Missing fields"];
-        return  (!EM_CLASS) ? $this->sender($post) : $this->app->get($this->active)->send($post);
+        return  (!$this->active) ? $this->sender($post) : $this->app->get($this->active)->send($post);
     }
     public function sender($post=[]) {
         $post['from'] =  $this->from;
+        if(!isset($post['type'])) $post['type'] = "text";
         if($post['type']!='text'){
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
