@@ -13,6 +13,12 @@ class package {
         if(file_exists(DIR_FRONT.'lib/package.json')) 
             $this->libs = json_decode($this->stripComments(file_get_contents(DIR_FRONT.'lib/package.json')),true);
     }
+     public function stripComments($input){
+    	//comments
+        $input =  preg_replace('#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#','$1',$input);
+        //trailing commas
+        return $input = preg_replace('/,[\n\s\t]*(?=[}\]])/','$1',$input);
+    }
     public function build(){
         if($this->libs=='') $this->libs = ['dependencies'=>[]];
         if (!file_exists(DIR_FRONT."lib")) mkdir(DIR_FRONT."lib", 0777, true);
