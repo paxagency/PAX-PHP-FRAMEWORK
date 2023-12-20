@@ -1,9 +1,12 @@
 <?php
+$_SSL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 1 : 0;
+$_PROTOCOL =  ($_SSL) ? "https://" : "http://";
 // SITE
-define('SITE_PUBLIC', $_SERVER['HTTP_HOST'].'/');
-define('SITE_URL_INDEX',1);
+define('SITE_PUBLIC', $_PROTOCOL.$_SERVER['HTTP_HOST'].'/');
+define('SITE_SSL', $_SSL);
 define('SITE_ERRORS', 1);
-define('SITE_SSL', 0);
+define('SITE_PROD', 0);
+define('SITE_URL_INDEX',1);
 define('SITE_WWW', 0);
 //PACKAGE
 define('SITE_BUILD',0);  //BUILD CSS & JS

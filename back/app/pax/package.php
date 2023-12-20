@@ -8,7 +8,7 @@ class package {
     public $js='';
     public $css='';
     public $app;
-    public $inject = ["jshrink"];
+    public $inject = ["minifier"];
 	public function __construct() {
         if(file_exists(DIR_FRONT.'lib/package.json')) 
             $this->libs = json_decode($this->stripComments(file_get_contents(DIR_FRONT.'lib/package.json')),true);
@@ -61,24 +61,44 @@ class package {
     }
     public function templates() {
 		$this->_folder = [];
-		$this->_setFolderTemp(DIR_PAGE);
-     
+		$this->_setFold(DIR_PAGE);
+		
 		foreach($this->_folder as $name=>$folder){
             $url = explode('pages/',$folder);
             $urlDash = str_replace(['.html','/'],['','-'],$url[1]);
+           // echo "<script>alert('{$name}');</script>";
             echo "<template app='{$name}'>";
             require_once($folder);
             echo "</template>";
         }
     }
 	function formatJs($js){
-		return $this->app->get("jshrink")::minify($js);
+		return $js;
+		return $this->app->get("minifier")::minify($js);
     }
     function formatCss($css){
-    	return $this->minify_css($css);
+		$css = $this->stripComments($css);
+		$css = $this->stripeWhitespace($css);
+		return $css;
 	}
 	public function download($url) {
         return file_get_contents($url);
+    }
+    private function _setFold($dir,$files='') {
+   	 	$folders = [];
+	  	foreach(scandir($dir) as $file) {
+			if($file[0]==".") continue;
+			if(is_dir($dir.$file)) {
+				$this->_setFold($dir.$file.'/',$files.$file.'_');
+			} else {	
+				$name = $files.str_replace('.html','',$file);
+				if($files!='') {
+					$name = ($file=='index.html') ?   substr($files, 0, -1) : str_replace('.html','',$files.$file);
+				}
+				
+				$this->_folder[$name] = $dir.$file;
+			}
+	  	}
     }
 	private function _setFolder($dir,$ignore=[]) {
 		$folders = [];
@@ -109,6 +129,27 @@ class package {
 			}
 	  	}
 	  	foreach($folders as $f) $this->_setFolderTemp($f.'/',$subst);
+	}
+	protected function stripComments($content) {
+        $id = "jsdf.823.dff3sf.356";
+		$content = str_replace("\//", $id, $content);
+		$content =  preg_replace('/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/', ' ', $content);
+		$content = str_replace($id,"\// ", $content);
+		return $content;
+    }
+	
+	protected function stripeWhitespace($content) {
+		
+		// uniform line endings, make them all line feed
+        $content = str_replace(array("\r\n", "\r"), "\n", $content);
+        // collapse all non-line feed whitespace into a single space
+        $content = preg_replace('/[^\S\n]+/', ' ', $content);
+        // strip leading & trailing whitespace
+        $content = str_replace(array(" \n", "\n "), " ", $content);
+        // collapse consecutive line feeds into just 1
+        $content = preg_replace('/\n+/', "\n", $content);
+		$content =  str_replace(array("\n"), '', $content);
+		return trim($content);
 	}
 	
     public function downloadCurl($name,$version='1.0.0'){
@@ -154,48 +195,6 @@ class package {
         }
         if(isset($package['main'])) $this->js.=file_get_contents($path.$package['main']);
         if(isset($package['style'])) $this->css.=file_get_contents($path.$package['style']);
-	}
-	
-	function minify_css($input) {
-		if(trim($input) === "") return $input;
-		return preg_replace(
-			array(
-				// Remove comment(s)
-				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
-				// Remove unused white-space(s)
-				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~]|\s(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
-				// Replace `0(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)` with `0`
-				'#(?<=[\s:])(0)(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)#si',
-				// Replace `:0 0 0 0` with `:0`
-				'#:(0\s+0|0\s+0\s+0\s+0)(?=[;\}]|\!important)#i',
-				// Replace `background-position:0` with `background-position:0 0`
-				'#(background-position):0(?=[;\}])#si',
-				// Replace `0.6` with `.6`, but only when preceded by `:`, `,`, `-` or a white-space
-				'#(?<=[\s:,\-])0+\.(\d+)#s',
-				// Minify string value
-				'#(\/\*(?>.*?\*\/))|(?<!content\:)([\'"])([a-z_][a-z0-9\-_]*?)\2(?=[\s\{\}\];,])#si',
-				'#(\/\*(?>.*?\*\/))|(\burl\()([\'"])([^\s]+?)\3(\))#si',
-				// Minify HEX color code
-				'#(?<=[\s:,\-]\#)([a-f0-6]+)\1([a-f0-6]+)\2([a-f0-6]+)\3#i',
-				// Replace `(border|outline):none` with `(border|outline):0`
-				'#(?<=[\{;])(border|outline):none(?=[;\}\!])#',
-				// Remove empty selector(s)
-				'#(\/\*(?>.*?\*\/))|(^|[\{\}])(?:[^\s\{\}]+)\{\}#s'
-			),
-			array(
-				'$1',
-				'$1$2$3$4$5$6$7',
-				'$1',
-				':0',
-				'$1:0 0',
-				'.$1',
-				'$1$3',
-				'$1$2$4$5',
-				'$1$2$3',
-				'$1:0',
-				'$1$2'
-			),
-		$input);
 	}
 }
 ?>
