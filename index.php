@@ -1,7 +1,7 @@
 <?php
 /*****************************
 docs.paxagency.com/php V 1.8.0 
-mit license • by albert kiteck
+mit license • by paxagency
 *****************************/
 define('APP_NAME', 'Project');
 define('APP_VERSION', '0.0.1');
