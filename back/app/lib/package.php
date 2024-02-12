@@ -1,7 +1,5 @@
 <?php
-/****************************************
-docs.paxagency.com/php/libraries/package
-*****************************************/
+
 class package {
     public $_folder = [];
     public $libs = '';
@@ -66,7 +64,6 @@ class package {
 		foreach($this->_folder as $name=>$folder){
             $url = explode('pages/',$folder);
             $urlDash = str_replace(['.html','/'],['','-'],$url[1]);
-           // echo "<script>alert('{$name}');</script>";
             echo "<template app='{$name}'>";
             require_once($folder);
             echo "</template>";

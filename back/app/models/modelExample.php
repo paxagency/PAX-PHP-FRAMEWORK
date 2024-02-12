@@ -13,10 +13,10 @@ class modelExample {
         return [1,2,3,4];
     }
     public function getAssoc($get=[],$post=[]) {
-        return ['success'=>1];
+        return ["url"=>"This URL is calling the modelExample class, getAssoc method","format"=>"By default an object outputs JSON","pretty"=>"Adding the ?pretty get parameter the JSON is pretty print","success"=>true];
     }
     public function useInjection($get=[],$post=[]) {
-        return $this->utilExample->roundNumber(1000.234233425);
+        return "This url is calling modeExample class, useInjection method. <br>And is using the utilExample class injected to get: ".$this->utilExample->roundNumber(1000.234233425);
     }
 }
 ?>

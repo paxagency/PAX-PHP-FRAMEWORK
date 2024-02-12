@@ -7,7 +7,7 @@ class controlExample {
         return 22;
     }
     public function getArray($get=[],$post=[]) {
-        return [2,3,4];
+        return ["This url is calling the class controlExample","And calling the method getArray"];
     }
     public function getAssoc($get=[],$post=[]) {
         return ['success'=>1];
