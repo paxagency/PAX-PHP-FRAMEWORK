@@ -1,0 +1,66 @@
+<?php
+/*********************
+$app->urlVars($urlValueCount, $strictMode);
+
+$urlValueCount
+Number of URL variables to allow 
+/one/two/three
+
+$strictMode
+default = All URL variables allowed
+0 = Only allow route and number of URL variables
+1 = Only allow route with URL variables
+2 = Only allow route with all URL variables
+*********************/
+
+$app->urlVars(1,1);
+$name = $_URL_VARS[0];
+
+?>
+<style>
+html{height:100%;}
+body{font-family:"Helvetica Neue","Helvetica",arial; background: radial-gradient(circle, rgba(255,255,255,1) 50%, rgba(235,235,240,1) 95%);font-size:120%;}
+a,p{font-size:15px;color:#888;text-decoration:none;font-weight:500;line-height:1.5em;}
+h1 {font-family:"Arial black"; font-size:6em;font-weight:900;letter-spacing:-.1em;margin:0;line-height:1em;}
+h2 {font-weight:200;letter-spacing:.3em;margin:0;text-transform:uppercase;}
+section {padding:30px;}
+</style>
+<div style="padding:100px;text-align:center;">
+	<h1>ABOUT</h1>
+	<h2><?=$name?><br>(URL Variable)</h3>
+</div>
+<div style="display:flex;justify-content:center;">
+	<section style="max-width:700px;">
+		<h3>URL Variable Restrictions</h3>
+		<p>This method creates requirements for variables within the URL after the route</p>
+		<h4>$app->urlVars($urlCount, $strictMode);</h4>
+		 <p>
+			
+
+<b>$urlCount</b><br>
+Number of URL variables to allow <br>
+/one/two/three/etc...<br><br>
+
+<b>$strictMode</b><br>
+default = All URL variables allowed<br>
+0 = Only allow route and number of URL variables<br>
+1 = Only allow route with URL variables<br>
+2 = Only allow route with all URL variables<br>
+<br><br>
+
+$app->urlVars(1,1);
+		 </p>
+		 <hr>
+		 <h3>Method #2 - for entire website</h3>
+		<h4>$app->urlMode($page_modes);</h4>
+		 
+		 <p>
+		 	$app->urlMode([<br>
+		 		&nbsp;&nbsp;&nbsp;&nbsp;"about"=>[1,1],<br>
+		 		&nbsp;&nbsp;&nbsp;&nbsp;"services/work"=>[1,1]<br>
+		 	]);<br>
+		 </p>
+		 
+	</section>
+	
+</div>

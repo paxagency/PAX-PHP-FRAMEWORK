@@ -42,5 +42,24 @@ class app {
 			return ($constructor->getParameters()[0]->name=="app") ? 1 : 0; 
 		return 0;
 	}
+	public function urlMode($a=[]){
+		global $_PATH;
+		$str = substr($_PATH, 0, -5);
+		(isset($a[$str])) ? $this->urlVars(...$a[$str]) : $this->urlVars();
+	}
+	public function urlVars($n=0,$strict=0) {
+		global $_URL_VARS;
+	 	$pass = true;
+		if(isset($_URL_VARS[$n]) && $_URL_VARS[$n]!="") $pass = false;
+		if($strict && !isset($_URL_VARS[1]) && (!isset($_URL_VARS[0]) || $_URL_VARS[0]=="")) $pass = false;
+	    if(!$n && ((isset($_URL_VARS[0]) && $_URL_VARS[0]!="") || isset($_URL_VARS[1]))) $pass = false;
+		if($strict==2 && (!isset($_URL_VARS[$n-1]) || $_URL_VARS[$n-1]=="")) $pass = false;
+		
+		if(!$pass) {
+			require_once(DIR_PAGE."error.html");
+			require_once(DIR_TEMP.'footer.html');
+			die();
+		}
+	}
 }
 ?>
